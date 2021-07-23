@@ -12,7 +12,6 @@ CREATE TABLE Customer_Info(
 	name varchar(10) NOT NULL,
 	mobile varchar(13) NOT NULL,
 	dob DATE NOT NULL,
-	age INT NOT NULL,
 	address varchar(100) NOT NULL,
 	note varchar(500),
 	CONSTRAINT PK_Customer PRIMARY KEY (ID)
@@ -20,6 +19,7 @@ CREATE TABLE Customer_Info(
 
 CREATE TABLE Locker(
 	lockerID INT NOT NULL,
+	occupied CHAR(0) DEFAULT NULL,
 	CONSTRAINT PK_Locker PRIMARY KEY (lockerID)
 );
 
@@ -37,8 +37,7 @@ CREATE TABLE Register(
 	customerID INT NOT NULL,
 	registered DATE NOT NULL,
 	how_long INT NOT NULL,
-	expires DATE NOT NULL,
-	CONSTRAINT PK_Register PRIMARY KEY (customerID, expires),
+	CONSTRAINT PK_Register PRIMARY KEY (customerID, registered, how_long),
 	CONSTRAINT FK_Register FOREIGN KEY(customerID) REFERENCES Customer_Info(ID) ON DELETE CASCADE
 );
 
@@ -47,8 +46,7 @@ CREATE TABLE Locker_Register(
 	lockerID INT NOT NULL,
 	registered DATE NOT NULL,
 	how_long INT NOT NULL,
-	expires DATE NOT NULL,
-	CONSTRAINT PK_LockerR PRIMARY KEY (lockerID),
+	CONSTRAINT PK_LockerR PRIMARY KEY (lockerID, registered, how_long),
 	CONSTRAINT FK_LockerR1 FOREIGN KEY(customerID) REFERENCES Customer_Info(ID) ON DELETE CASCADE,
 	CONSTRAINT FK_LockerR2 FOREIGN KEY(lockerID) REFERENCES Locker(lockerID)
 );
@@ -58,8 +56,7 @@ CREATE TABLE Lesson_Register(
 	teacherID INT NOT NULL,
 	registered DATE NOT NULL,
 	how_long INT NOT NULL,
-	expires DATE NOT NULL,
-	CONSTRAINT PK_LessonR PRIMARY KEY (customerID, expires),
+	CONSTRAINT PK_LessonR PRIMARY KEY (customerID, registered, how_long),
 	CONSTRAINT FK_LessonR1 FOREIGN KEY (customerID) REFERENCES Customer_Info(ID) ON DELETE CASCADE,
 	CONSTRAINT FK_LessonR2 FOREIGN KEY (teacherID) REFERENCES Teacher_Info(teacherID)
 );

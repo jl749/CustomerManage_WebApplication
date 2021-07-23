@@ -28,7 +28,7 @@ table, th, td {
 // REGISTRATION........
 $today = date("Y-m-d");
 //DATE_ADD(CURDATE(),INTERVAL -5 DAY)
-$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Register.customerID) AS name, registered, how_long, expires, DATEDIFF(expires, CURDATE()) AS days_left FROM Register WHERE  DATEDIFF(expires, CURDATE()) between 0 AND 5";
+$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Register.customerID) AS name, registered, how_long, (DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH)) AS expires, DATEDIFF((DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH)), CURDATE()) AS days_left FROM Register WHERE  DATEDIFF((DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH)), CURDATE()) between 0 AND 5";
 $result = mysqli_query($conn, $sql);
 
 if ($result!=false && mysqli_num_rows($result) > 0) {
@@ -60,7 +60,7 @@ if ($result!=false && mysqli_num_rows($result) > 0) {
 // LOCKER........
 $today = date("Y-m-d");
 //DATE_ADD(CURDATE(),INTERVAL -5 DAY)
-$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Locker_Register.customerID) AS name, lockerID, registered, how_long, expires, DATEDIFF(expires, CURDATE()) AS days_left FROM Locker_Register WHERE  DATEDIFF(expires, CURDATE()) between 0 AND 5";
+$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Locker_Register.customerID) AS name, lockerID, registered, how_long, (DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH)) AS expires, DATEDIFF((DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH)), CURDATE()) AS days_left FROM Locker_Register WHERE  DATEDIFF((DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH)), CURDATE()) between 0 AND 5";
 $result = mysqli_query($conn, $sql);
 
 if ($result!=false && mysqli_num_rows($result) > 0) {
@@ -69,8 +69,8 @@ if ($result!=false && mysqli_num_rows($result) > 0) {
 ?>
 		<tr>
 			<td><?= $row["customerID"]; ?></td>
-			<td><?= $row["lockerID"]; ?></td>
 			<td><?= $row["name"]; ?></td>
+			<td><?= $row["lockerID"]; ?></td>
 			<td><?= $row["registered"]; ?></td>
 			<td><?= $row["how_long"]; ?></td>
 			<td><?= $row["expires"]; ?></td>
@@ -88,12 +88,12 @@ if ($result!=false && mysqli_num_rows($result) > 0) {
 <div class="title">[레슨 마감]</div>
 <div>
 	<table class="table table-bordered table-hover">
-		<tr class="table-warning"><th>회원 ID</th><th>이름</th><th>선생님</th><th>등록일</th><th>기간</th><th>마감일</th><th>남은 기간</th></tr>
+		<tr class="table-warning"><th>회원 ID</th><th>이름</th><th>강사님</th><th>등록일</th><th>기간</th><th>마감일</th><th>남은 기간</th></tr>
 <?php
 // REGISTRATION........
 $today = date("Y-m-d");
 //DATE_ADD(CURDATE(),INTERVAL -5 DAY)
-$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Lesson_Register.customerID) AS name, (SELECT name FROM Teacher_Info WHERE teacherID=Lesson_Register.teacherID) AS teacher_name, registered, how_long, expires, DATEDIFF(expires, CURDATE()) AS days_left FROM Lesson_Register WHERE  DATEDIFF(expires, CURDATE()) between 0 AND 5";
+$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Lesson_Register.customerID) AS name, (SELECT name FROM Teacher_Info WHERE teacherID=Lesson_Register.teacherID) AS teacher_name, registered, how_long, (DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH)) AS expires, DATEDIFF((DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH)), CURDATE()) AS days_left FROM Lesson_Register WHERE  DATEDIFF((DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH)), CURDATE()) between 0 AND 5";
 $result = mysqli_query($conn, $sql);
 
 if ($result!=false && mysqli_num_rows($result) > 0) {

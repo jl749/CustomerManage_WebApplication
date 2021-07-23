@@ -6,7 +6,7 @@ if(session_status() == PHP_SESSION_NONE){
 }
 
 $conn = Connection();
-$sql = "SELECT * FROM Teacher_Info";
+$sql = "SELECT teacherID, name, mobile, dob, (SELECT TIMESTAMPDIFF(YEAR, Teacher_Info.dob, CURDATE())) AS age, address, note FROM Teacher_Info";
 $result = mysqli_query($conn, $sql);
 
 //print_r($rows)
@@ -61,7 +61,7 @@ table {
 <div class="title">강사 페이지 입니다</div>
 <div>
 	<table class="table table-bordered table-hover table-condensed" style="margin-bottom: 0;">
-		<tr class="table-success"><th>강사 ID</th><th>이름</th><th>전화번호</th><th>생일</th><th>주소</th><th>비고</th><th>-</th></tr>
+		<tr class="table-success"><th>강사 ID</th><th>이름</th><th>전화번호</th><th>생일</th><th>나이</th><th>주소</th><th>비고</th><th>-</th></tr>
 <?php
 		if ($result!=false && mysqli_num_rows($result) > 0) {
 			$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -72,6 +72,7 @@ table {
 					<td><?= $row["name"]; ?></td>
 					<td><?= $row["mobile"]; ?></td>
 					<td><?= $row["dob"]; ?></td>
+					<td><?= $row["age"]; ?></td>
 					<td><?= $row["address"]; ?></td>
 					<td><?= $row["note"]; ?></td>
 					<td class="table-danger"><button type="button" class="del">X</button></td>
@@ -84,16 +85,15 @@ table {
 	</table>
 	<button type="button" class="collapsible">강사 추가▽</button>
 	<div class="content">
-	  <form action="./insertTeacher.php" method="POST" id="inputform">
+	  <form action="./insertTeacher.php" method="POST" id="inputform" style="margin-top: 0.3rem;">
 		이름: 
-		<input class="regInput" type="text" name="name"></br>
+		<input class="regInput" type="text" name="name" required></br>
 		전화번호: 
-		<input class="regInput" style="width: 8rem;" type="text" name="phone" placeholder="010-xxxx-xxxx"></br>
+		<input class="regInput" style="width: 8rem;" type="text" name="phone" placeholder="010-xxxx-xxxx" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required></br>
 		생일: 
-		<input class="regInput" type="date" name="dob" value="<?php echo date("Y-m-d");?>"></br>
-		주소: 
-		<input class="regInput" type="text" name="address"></br>
-		<textarea style="margin-top: 0.5rem;" rows="4" cols="50" name="comment" form="inputform" placeholder="비고 입력란 ..."></textarea>
+		<input class="regInput" type="date" name="dob" value="<?php echo date("Y-m-d");?>" required></br>
+		<textarea id="address" rows="2" cols="50" name="address" placeholder="주소 입력란 ..."></textarea></br>
+		<textarea rows="4" cols="50" name="comment" form="inputform" placeholder="비고 입력란 ..."></textarea>
 		<input type="submit" name="name_search" value="추가">
 	  </form>
 	</div> 

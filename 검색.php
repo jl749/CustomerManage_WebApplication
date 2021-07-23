@@ -89,7 +89,7 @@ if(isset($_GET["name_id"])){
 				<tr><th>회원 ID</th><th>이름</th><th>전화번호</th><th>생일</th><th>나이</th><th>주소</th><th>비고</th></tr>
 <?php
 		foreach($id as $x){
-			$result = mysqli_query($conn, "SELECT * FROM Customer_Info WHERE ID='$x'");
+			$result = mysqli_query($conn, "SELECT ID, name, mobile, dob, (SELECT TIMESTAMPDIFF(YEAR, Customer_Info.dob, CURDATE())) AS age, address, note FROM Customer_Info WHERE ID='$x'");
 			$row = mysqli_fetch_assoc($result);
 ?>
 			<tr>
@@ -116,7 +116,7 @@ if(isset($_GET["name_id"])){
 <?php
 		// REGISTRATION........
 		foreach($id as $x){
-			$sql = "SELECT * FROM Register WHERE customerID='$x'";
+			$sql = "SELECT customerID, registered, how_long, (SELECT DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH)) AS expires FROM Register WHERE customerID='$x'";
 			$result = mysqli_query($conn, $sql);
 
 			if ($result!=false && mysqli_num_rows($result) > 0) {
@@ -161,7 +161,7 @@ if(isset($_GET["name_id"])){
 <?php
 		// LOCKER........
 		foreach($id as $x){
-			$sql = "SELECT * FROM Locker_Register WHERE customerID='$x'";
+			$sql = "SELECT customerID, lockerID, registered, how_long, (SELECT DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH)) AS expires  FROM Locker_Register WHERE customerID='$x'";
 			$result = mysqli_query($conn, $sql);
 
 			if ($result!=false && mysqli_num_rows($result) > 0) {
@@ -207,7 +207,7 @@ if(isset($_GET["name_id"])){
 <?php
 		// LESSON........
 		foreach($id as $x){
-			$sql = "SELECT customerID, teacherID, (SELECT name FROM Teacher_Info WHERE teacherID=Lesson_Register.teacherID) as teacherName, registered, how_long, expires FROM Lesson_Register WHERE customerID='$x'";
+			$sql = "SELECT customerID, teacherID, (SELECT name FROM Teacher_Info WHERE teacherID=Lesson_Register.teacherID) as teacherName, registered, how_long, (SELECT DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH)) AS expires FROM Lesson_Register WHERE customerID='$x'";
 			$result = mysqli_query($conn, $sql);
 
 			if ($result!=false && mysqli_num_rows($result) > 0) {

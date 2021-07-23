@@ -9,11 +9,11 @@ $rows_per_page = 20;
 
 $conn = Connection();
 $result = mysqli_query($conn, "SELECT COUNT(ID) as cnt FROM Customer_Info");
+$offset = 0;
 $count = mysqli_fetch_row($result)[0];
 mysqli_free_result($result);
 
-$sql = "SELECT * FROM Customer_Info ORDER BY name"; //LIMIT 30 OFFSET 0
-$offset = 0;
+$sql = "SELECT ID, name, mobile, dob, (SELECT TIMESTAMPDIFF(YEAR, Customer_Info.dob, CURDATE())) AS age, address, note FROM Customer_Info ORDER BY name"; //LIMIT 30 OFFSET 0
 $result = mysqli_query($conn, $sql);
 
 //print_r($rows)
@@ -124,15 +124,14 @@ form > input {
 		
 		<form style="margin: 0 1rem;">
 			<label for="name">이름: </label><br>
-			<input type="text" id="name" name="name"><br>
+			<input type="text" id="name" name="name" required><br>
 			<label for="phone">전화번호: </label><br>
-			<input type="text" id="phone" name="phone"></br>
+			<input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required></br>
 			<label for="phone">생일: </label><br>
-			<input type="date" id="dob" name="dob"></br>
+			<input type="date" id="dob" name="dob" required></br>
 			<label for="age">나이: </label><br>
 			<input type="number" id="age" name="age" min="10" max="100" disabled></br>
 			<label for="address">주소: </label><br>
-
 			<textarea id="address" rows="2" cols="50" name="address"></textarea></br>
 			<label for="comment">비고: </label><br>
 			<textarea id="comment" rows="4" cols="50" name="comment"></textarea>
