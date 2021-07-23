@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Home - 회원관리 시스템</title>
+  <style>
+	.btn{
+		height: 6rem;
+		width: 20rem;
+		margin: 2.5rem 0;
+		font-size: 2rem;
+		text-align: center;
+		display: block;
+	}
+  </style>
+  <script>
+    function redirect(x) {
+		window.open(x); //window.location.href=x;
+    }
+  </script>
+</head>
+<body>
+
+<div style="padding-left: auto; padding-right:auto;">
+	<div style="text-align: center; margin: 3rem; display: inline-block; float: left; margin-bottom: 0rem">
+		 <button class="btn" type="button" onclick="redirect('./검색.php')">회원 검색</button> 
+		 <button class="btn" type="button" onclick="redirect('./체크인.php')">회원 체크인</button> 
+		 <button class="btn" type="button" onclick="redirect('./등록.php')">회원 등록</button>
+	</div>
+	
+	<div style="text-align: center; margin: 3rem; display: inline-block; margin-bottom: 0rem">
+		<button class="btn" style="color: white; background-color: #f44336;" type="button" onclick="redirect('./말소확인.php')" >말소 회원</button>
+		<button class="btn" type="button" onclick="redirect('./강사.php')">강사 정보</button>
+		<button class="btn" type="button" onclick="redirect('./회원.php')">회원 정보</button>
+	</div>
+</div>
+</body>
+</html>
