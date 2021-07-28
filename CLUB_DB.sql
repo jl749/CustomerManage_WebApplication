@@ -13,7 +13,7 @@ CREATE TABLE Customer_Info(
 	mobile varchar(13) NOT NULL,
 	dob DATE NOT NULL,
 	address varchar(100) NOT NULL,
-	note varchar(500),
+	note varchar(500) DEFAULT '-',
 	CONSTRAINT PK_Customer PRIMARY KEY (ID)
 );
 
@@ -29,7 +29,7 @@ CREATE TABLE Teacher_Info(
 	mobile varchar(13) NOT NULL,
 	dob DATE NOT NULL,
 	address varchar(100) NOT NULL,
-	note varchar(500),
+	note varchar(500) DEFAULT '-',
 	CONSTRAINT PK_Teacher PRIMARY KEY (teacherID)
 );
 
