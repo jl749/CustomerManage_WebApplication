@@ -94,7 +94,7 @@ table {
 		<input class="regInput" type="date" name="dob" value="<?php echo date("Y-m-d");?>" required></br>
 		<textarea id="address" rows="2" cols="50" name="address" placeholder="주소 입력란 ..."></textarea></br>
 		<textarea rows="4" cols="50" name="comment" form="inputform" placeholder="비고 입력란 ..."></textarea>
-		<input type="submit" name="name_search" value="추가">
+		<input type="submit" name="insert" value="추가">
 	  </form>
 	</div> 
 </div>

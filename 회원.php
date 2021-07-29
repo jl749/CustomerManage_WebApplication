@@ -132,10 +132,10 @@ form > input {
 			<label for="age">나이: </label><br>
 			<input type="number" id="age" name="age" min="10" max="100" disabled></br>
 			<label for="address">주소: </label><br>
-			<textarea id="address" rows="2" cols="50" name="address"></textarea></br>
+			<textarea id="address" rows="2" cols="30" name="address"></textarea></br>
 			<label for="comment">비고: </label><br>
-			<textarea id="comment" rows="4" cols="50" name="comment"></textarea>
-			<div><input style="float:right;" type="submit" name="name_search" value="수정"></div>
+			<textarea id="comment" rows="4" cols="30" name="comment"></textarea>
+			<div><input style="float:right;" type="submit" name="update" value="수정"></div>
 		</form>
 	</div>
 </div>

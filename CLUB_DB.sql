@@ -24,7 +24,7 @@ CREATE TABLE Locker(
 );
 
 CREATE TABLE Teacher_Info(
-	teacherID INT NOT NULL,
+	teacherID INT AUTO_INCREMENT,
 	name varchar(10) NOT NULL,
 	mobile varchar(13) NOT NULL,
 	dob DATE NOT NULL,
