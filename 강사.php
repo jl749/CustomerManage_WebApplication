@@ -55,6 +55,7 @@ table {
   margin: 1rem 0;
 }
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
@@ -75,7 +76,12 @@ table {
 					<td><?= $row["age"]; ?></td>
 					<td><?= $row["address"]; ?></td>
 					<td><?= $row["note"]; ?></td>
-					<td class="table-danger"><button type="button" class="del">X</button></td>
+					<td class="table-danger">
+						<form action="./insertTeacher.php" method="POST">
+							<input class="instanceID" type="text" name="ID" hidden>
+							<input type="submit" name="delete" class="del" value="X"> <!-- onclick="return confirm('지울까요?')" -->
+						</form>
+					</td>
 				</tr>
 <?php
 			}
@@ -100,6 +106,13 @@ table {
 </div>
 
 <script>
+	$('.instanceID').each(function() {
+		//First child of td
+		$id = $(this).parent().parent().parent().children(':first-child').text();
+		$(this).val($id);
+		console.log($(this));
+    });
+	
 	var coll = document.getElementsByClassName("collapsible");
 	var i;
 
