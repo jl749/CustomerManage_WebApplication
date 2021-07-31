@@ -20,7 +20,8 @@ if(isset($_POST['insert_reg']) && !empty($_POST['insert_reg'])){ # INSERT
 	if(mysqli_query($conn, $sql)){
 		echo "SUCCESS, redirect in 1 second";
 		//redirect
-		header( "refresh:1;url=".$next ); 
+		sleep(1);
+		header( "Location: ".$next ); 
 	}else{echo "INSERT failed, Query='$sql'";}
 	
 	mysqli_close($conn);
@@ -32,11 +33,12 @@ if(isset($_POST['insert_reg']) && !empty($_POST['insert_reg'])){ # INSERT
 	$how_long = $_POST['how_long'];
 	$next = urlencode($_POST['currentURL']);
 	
-	$sql = "UPDATE Register SET how_long=(SELECT how_long FROM Register WHERE customerID=101 ORDER BY registered DESC LIMIT 1)+'$how_long' WHERE customerID='$id' AND registered='$registered'";
+	$sql = "UPDATE Register SET how_long=how_long+'$how_long' WHERE customerID='$id' AND registered='$registered'";
 	if(mysqli_query($conn, $sql)){
 		echo "SUCCESS, redirect in 1 second";
 		//redirect
-		header( "refresh:1;url=".$next ); 
+		sleep(1);
+		//header( "Location: ".$next ); 
 	}else{echo "UPDATE failed, Query='$sql'";}
 }elseif(isset($_POST['delete']) && !empty($_POST['delete'])){ # DELETE
 	$conn = Connection();
@@ -50,7 +52,8 @@ if(isset($_POST['insert_reg']) && !empty($_POST['insert_reg'])){ # INSERT
 	if(mysqli_query($conn, $sql)){
 		echo "SUCCESS, redirect in 1 second";
 		//redirect
-		header( "refresh:1;url=".$next ); 
+		sleep(1);
+		header( "Location: ".$next ); 
 		mysqli_close($conn);
 	}else{echo "DELETE failed, Query='$sql'";}
 }else{echo "Wrong Access";}
