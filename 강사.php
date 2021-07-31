@@ -77,7 +77,7 @@ table {
 					<td><?= $row["address"]; ?></td>
 					<td><?= $row["note"]; ?></td>
 					<td class="table-danger">
-						<form action="./insertTeacher.php" method="POST">
+						<form action="./CUD_teacher.php" method="POST">
 							<input class="instanceID" type="text" name="ID" hidden>
 							<input type="submit" name="delete" class="del" value="X"> <!-- onclick="return confirm('지울까요?')" -->
 						</form>
@@ -91,7 +91,7 @@ table {
 	</table>
 	<button type="button" class="collapsible">강사 추가▽</button>
 	<div class="content">
-	  <form action="./insertTeacher.php" method="POST" id="inputform" style="margin-top: 0.3rem;">
+	  <form action="./CUD_teacher.php" method="POST" id="inputform" style="margin-top: 0.3rem;">
 		이름: 
 		<input class="regInput" type="text" name="name" required></br>
 		전화번호: 
@@ -106,11 +106,15 @@ table {
 </div>
 
 <script>
+	$('.del').click(function(){
+		$del_info = [$(this).parent().parent().parent().children(':first-child').text(), $(this).parent().parent().parent().children(':nth-child(2)').text()];
+		return confirm('('+$del_info[0]+', '+$del_info[1]+')\n삭제합니다까?');
+	});
 	$('.instanceID').each(function() {
 		//First child of td
 		$id = $(this).parent().parent().parent().children(':first-child').text();
 		$(this).val($id);
-		console.log($(this));
+		//console.log($(this));
     });
 	
 	var coll = document.getElementsByClassName("collapsible");

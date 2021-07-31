@@ -44,7 +44,13 @@ table {
 .regInput {
   width: 130px;
 }
+
+td > form {
+  margin: 0 0;
+  display: inline;
+}
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 <div>
@@ -119,17 +125,45 @@ if(isset($_GET["name_id"])){
 			$sql = "SELECT customerID, registered, how_long, (SELECT DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH)) AS expires FROM Register WHERE customerID='$x'";
 			$result = mysqli_query($conn, $sql);
 
-			if ($result!=false && mysqli_num_rows($result) > 0) {
+			$size = mysqli_num_rows($result);
+			if ($result!=false && $size > 0) {
 				$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
-				//print_r($rows)
-				foreach($rows as $row) {
+				//print_r($rows);
+				
+				for($i=0 ; $i < $size ; $i++){
 ?>
 					<tr>
-						<td><?= $row["customerID"]; ?></td>
-						<td><?= $row["registered"]; ?></td>
-						<td><?= $row["how_long"]; ?></td>
-						<td><?= $row["expires"]; ?></td>
-						<td><button type="button" class="del">X</button></td>
+						<td><?= $rows[$i]["customerID"]; ?></td>
+						<td><?= $rows[$i]["registered"]; ?></td>
+<?php
+					if($i < $size-1){
+?>
+						<td><?= $rows[$i]["how_long"]; ?></td>
+<?php 
+					}else{
+?>
+						<td><?= $rows[$i]["how_long"]; ?> 
+							<form action='./CUD_reg.php' method='POST'>
+								<input class="currentURL" type="text" name="currentURL" hidden>
+								<input class="ID" type="text" name="ID" hidden>
+								<input class="registered" type="text" name="registered" hidden>
+								<input style="width: 2.6rem;" type="number" min=1 max=12 name='how_long' value=1>
+								<input type="submit" name="extend" value="연장">
+							</form>
+						</td>
+<?php
+					}
+?>
+						<td><?= $rows[$i]["expires"]; ?></td>
+						<td class="table-danger">
+						<form action="./CUD_reg.php" method="POST">
+							<input class="currentURL" type="text" name="currentURL" hidden>
+							<input class="registered" type="text" name="registered" hidden>
+							<input class="ID" type="text" name="ID" hidden>
+							<input class="how_long" type="text" name="how_long" hidden>
+							<input type="submit" name="delete" class="del" value="X"> <!-- onclick="return confirm('지울까요?')" -->
+						</form>
+					</td>
 					</tr>
 <?php
 				}
@@ -142,14 +176,15 @@ if(isset($_GET["name_id"])){
 			<button type="button" class="collapsible">회원권 추가▽</button>
 			<div class="content">
 			  <!-- FROM next??????? -->
-			  <form action="./insertReg.php" method="POST">
+			  <form action="./CUD_reg.php" method="POST">
+				<input class="currentURL" type="text" name="currentURL" hidden>
 				아이디:
 				<input class="regInput" type="text" name="customer_id" value="<?php echo $id[0];?>"></br>
 				등록일:
 				<input class="regInput" type="date" name="reg_date" value="<?php echo date("Y-m-d");?>"></br>
 				개월수:
 				<input class="regInput" style="width: 82px;" type="text" name="how_long">
-				<input type="submit" name="name_search" value="추가">
+				<input type="submit" name="insert_reg" value="추가">
 			  </form>
 			</div> 
 		</div>
@@ -258,6 +293,25 @@ if(isset($_GET["name_id"])){
 ?>
 
 <script>
+	$('.del').click(function(){
+		$del_info = [$(this).parent().parent().parent().children(':first-child').text(), $(this).parent().parent().parent().children(':nth-child(2)').text()];
+		return confirm('('+$del_info[0]+', '+$del_info[1]+')\n삭제합니다까?');
+	});
+	
+	// FILL HIDDENs
+	$('.currentURL').each(function() {
+		$(this).val(window.location.href);
+    });
+	$('.ID').each(function() {
+		$(this).val($(this).parent().parent().parent().children(':first-child').text());
+    });
+	$('.registered').each(function() {
+		$(this).val($(this).parent().parent().parent().children(':nth-child(2)').text());
+    });
+	$('.how_long').each(function() {
+		$(this).val($(this).parent().parent().parent().children(':nth-child(3)').text());
+    });
+	
 	var coll = document.getElementsByClassName("collapsible");
 	var i;
 

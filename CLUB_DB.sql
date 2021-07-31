@@ -37,7 +37,7 @@ CREATE TABLE Register(
 	customerID INT NOT NULL,
 	registered DATE NOT NULL,
 	how_long INT NOT NULL,
-	CONSTRAINT PK_Register PRIMARY KEY (customerID, registered, how_long),
+	CONSTRAINT PK_Register PRIMARY KEY (customerID, registered),
 	CONSTRAINT FK_Register FOREIGN KEY(customerID) REFERENCES Customer_Info(ID) ON DELETE CASCADE
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE Locker_Register(
 	lockerID INT NOT NULL,
 	registered DATE NOT NULL,
 	how_long INT NOT NULL,
-	CONSTRAINT PK_LockerR PRIMARY KEY (lockerID, registered, how_long),
+	CONSTRAINT PK_LockerR PRIMARY KEY (lockerID, registered),
 	CONSTRAINT FK_LockerR1 FOREIGN KEY(customerID) REFERENCES Customer_Info(ID) ON DELETE CASCADE,
 	CONSTRAINT FK_LockerR2 FOREIGN KEY(lockerID) REFERENCES Locker(lockerID)
 );
@@ -56,7 +56,7 @@ CREATE TABLE Lesson_Register(
 	teacherID INT NOT NULL,
 	registered DATE NOT NULL,
 	how_long INT NOT NULL,
-	CONSTRAINT PK_LessonR PRIMARY KEY (customerID, registered, how_long),
+	CONSTRAINT PK_LessonR PRIMARY KEY (customerID, registered),
 	CONSTRAINT FK_LessonR1 FOREIGN KEY (customerID) REFERENCES Customer_Info(ID) ON DELETE CASCADE,
 	CONSTRAINT FK_LessonR2 FOREIGN KEY (teacherID) REFERENCES Teacher_Info(teacherID)
 );

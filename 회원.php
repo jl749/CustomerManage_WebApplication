@@ -80,7 +80,7 @@ table {
   cursor: pointer;
 }
 
-form > input {
+form#modal_form > input {
   width: 10rem;
 }
 </style>
@@ -105,7 +105,12 @@ form > input {
 					<td><?= $row["age"]; ?></td>
 					<td><span class="clickable_s"><?= $row["address"]; ?></span></td>
 					<td><span class="clickable_s"><?= empty($row["note"])? "-" : $row["note"]; ?></span></td>
-					<td class="table-danger"><button type="button" class="del">X</button></td>
+					<td class="table-danger">
+						<form action="./CUD_customer.php" method="POST">
+							<input class="instanceID" type="text" name="ID" hidden>
+							<input type="submit" name="delete" class="del" value="X"> <!-- onclick="return confirm('지울까요?')" -->
+						</form>
+					</td>
 				</tr>
 <?php
 			}
@@ -119,10 +124,11 @@ form > input {
 <div id="myModal" class="modal">
 	<div class="modal-content" style="width: 30rem;">
 	<div style="text-align: right;">
-	<span id="close" style="display: inline;">&times;</span>
+		<span id="close" style="display: inline;">&times;</span>
 	</div>
 		
-		<form style="margin: 0 1rem;">
+		<form id="modal_form" style="margin: 0 1rem;" action="./CUD_customer.php" method="POST">
+			<input id="instanceID" type="text" name="ID" hidden>
 			<label for="name">이름: </label><br>
 			<input type="text" id="name" name="name" required><br>
 			<label for="phone">전화번호: </label><br>
@@ -141,6 +147,17 @@ form > input {
 </div>
 
 <script>
+$('.instanceID').each(function() {
+	//First child of td
+	$id = $(this).parent().parent().parent().children(':first-child').text();
+	$(this).val($id);
+	//console.log($(this));
+});
+
+$('.del').click(function(){
+	$del_info = [$(this).parent().parent().parent().children(':first-child').text(), $(this).parent().parent().parent().children(':nth-child(2)').text()];
+	return confirm('('+$del_info[0]+', '+$del_info[1]+')\n삭제합니다까?');
+});
 function getAge(dateString) {
 	var today = new Date();
 	var birthDate = new Date(dateString);
@@ -173,7 +190,8 @@ for(var i=0; i < btns.length ; i++){
 	btns[i].onclick = function() {
 		modal.style.display = "block";
 		$clickedTXT = $(this).text();
-		//console.log($(this).parent().parent().children(':first-child').text());
+		$('#instanceID').val($(this).parent().parent().children(':first-child').text());
+		console.log($('#instanceID').val());
 		//console.log($(this).parent().parent().children(':nth-child(2)').text());
 		
 		for(var i=0 ; i < 6 ; i++)
