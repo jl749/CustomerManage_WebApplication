@@ -22,7 +22,8 @@ if(isset($_POST['update']) && !empty($_POST['update'])){ # UPDATE
 	if(mysqli_query($conn, $sql)){
 		echo "SUCCESS, redirect in 1 second";
 		//redirect
-		header( "refresh:1;url=".$des ); 
+		//header( "refresh:1;url=".$des ); 
+		header( "Location: ".$des ); 
 	}else{echo "UPDATE failed, Query='$sql'";}
 	
 	mysqli_close($conn);
@@ -35,7 +36,7 @@ if(isset($_POST['update']) && !empty($_POST['update'])){ # UPDATE
 	if(mysqli_query($conn, $sql)){
 		echo "SUCCESS, redirect in 1 second";
 		//redirect
-		header( "refresh:1;url=".$des ); 
+		header( "Location: ".$des ); 
 		
 		mysqli_close($conn);
 	}else{echo "DELETE failed, Query='$sql'";}
@@ -53,7 +54,7 @@ if(isset($_POST['update']) && !empty($_POST['update'])){ # UPDATE
 		echo "SUCCESS, redirect in 1 second";
 		//redirect
 		$_SESSION['customerCreate'] = "고객 '$name' 님 DB에 추가되었습니다";
-		header( "refresh:1;url=".$des ); 
+		header( "Location: ".$des ); 
 	}else{echo "INSERTION failed, Query='$sql'";}
 	
 	mysqli_close($conn);
