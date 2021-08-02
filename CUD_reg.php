@@ -26,10 +26,9 @@ if(isset($_POST['insert_reg']) && !empty($_POST['insert_reg'])){ # INSERT
 		echo "SUCCESS, redirect in 1 second";
 		//redirect
 		header( "Location: $next" );
+		mysqli_close($conn);
 		die();
 	}else{echo "INSERT failed, Query='$sql'";}
-	
-	mysqli_close($conn);
 }elseif(isset($_POST['extend']) && !empty($_POST['extend'])){ # UPDATE
 	$conn = Connection();
 	
