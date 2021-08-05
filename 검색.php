@@ -29,12 +29,14 @@ if(session_status() == PHP_SESSION_NONE){
   display: none;
   overflow: hidden;
 }
+
 table, th, td {
   border: 1px solid black;
   text-align: center;
 }
+
 table {
-  width: 100%;
+  border-collapse: collapse;
 }
 .title {
   margin-top: 1rem;
@@ -49,12 +51,22 @@ td > form {
   margin: 0 0;
   display: inline;
 }
+
+th {
+  background-color: #e8d5f5;
+}
+
+.regInput {
+  width: 10rem;
+  margin: 0.1rem;
+}
 </style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 <div>
-	<form method="GET">
+	<form class="m-4" method="GET">
 		<input type="text" name="name_id">
 		<input type="submit" name="name_id_search" value="검색">
 	</form>
@@ -68,21 +80,29 @@ if(isset($_GET["name_id"])){
 	$name = null;
 	$id = [];
 	if(preg_match($pattern, $name_id)) {
-		$sql = "SELECT * FROM Register WHERE customerID='$name_id'";
-		echo "회원번호로 검색: ".$name_id."\n";
-		array_push($id, $name_id);
-	}else{
-		$sql = "SELECT * FROM Register WHERE customerID=(SELECT ID FROM Customer_Info WHERE name='$name_id')";
-		$result = mysqli_query($conn, "SELECT ID FROM Customer_Info WHERE name='$name_id'");
-		$rows = mysqli_fetch_all($result);
+		$result = mysqli_query($conn, "SELECT ID FROM Customer_Info WHERE ID='$name_id'");
+		if($result!=false && mysqli_num_rows($result) > 0){
+			array_push($id, $name_id);
+		}else
+			$id = null;
 		
-		foreach($rows as $row){
-			array_push($id, $row[0]);
-		}
+		echo "회원번호로 검색: ".$name_id."\n";
+		if($result!=false)
+			mysqli_free_result($result);
+	}else{
+		$result = mysqli_query($conn, "SELECT ID FROM Customer_Info WHERE name='$name_id'");
+		
+		if($result!=false && mysqli_num_rows($result) > 0){
+			$rows = mysqli_fetch_all($result);
+			foreach($rows as $row)
+				array_push($id, $row[0]);
+		}else
+			$id = null;
 		
 		echo "이름으로 검색: ".$name_id."\n";
 		$name = $name_id;
-		mysqli_free_result($result);
+		if($result!=false)
+			mysqli_free_result($result);
 	}
 
 	if($id != null){
@@ -91,8 +111,8 @@ if(isset($_GET["name_id"])){
 		<!-- 회원정보 -->
 		<div class="title">[회원정보]</div>
 		<div>
-			<table>
-				<tr><th>회원 ID</th><th>이름</th><th>전화번호</th><th>생일</th><th>나이</th><th>주소</th><th>비고</th></tr>
+			<table class="table table-bordered table-hover table-condensed">
+				<tr class="table-warning"><th>회원 ID</th><th>이름</th><th>전화번호</th><th>생일</th><th>나이</th><th>주소</th><th>비고</th></tr>
 <?php
 		foreach($id as $x){
 			$result = mysqli_query($conn, "SELECT ID, name, mobile, dob, (SELECT TIMESTAMPDIFF(YEAR, Customer_Info.dob, CURDATE())) AS age, address, note FROM Customer_Info WHERE ID='$x'");
@@ -117,12 +137,12 @@ if(isset($_GET["name_id"])){
 		<!-- 등록 -->
 		<div class="title">[등록]</div>
 		<div>
-			<table>
-				<tr><th>회원 ID</th><th>등록일</th><th>기간</th><th>마감일</th><th>-</th></tr>
+			<table class="table table-bordered table-hover table-condensed" style="margin-bottom: 0;">
+				<tr class="table-warning"><th>회원 ID</th><th>등록일</th><th>기간</th><th>마감일</th><th>-</th></tr>
 <?php
 		// REGISTRATION........
 		foreach($id as $x){
-			$sql = "SELECT customerID, registered, how_long, (SELECT DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH)) AS expires FROM Register WHERE customerID='$x'";
+			$sql = "SELECT customerID, registered, how_long, (SELECT DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH)) AS expires FROM Register WHERE customerID='$x' ORDER BY expires";
 			$result = mysqli_query($conn, $sql);
 
 			$size = mysqli_num_rows($result);
@@ -155,6 +175,7 @@ if(isset($_GET["name_id"])){
 					}
 ?>
 						<td><?= $rows[$i]["expires"]; ?></td>
+						
 						<td class="table-danger">
 						<form action="./CUD_reg.php" method="POST">
 							<input class="currentURL" type="text" name="currentURL" hidden>
@@ -163,7 +184,7 @@ if(isset($_GET["name_id"])){
 							<input class="how_long" type="text" name="how_long" hidden>
 							<input type="submit" name="delete" class="del" value="X"> <!-- onclick="return confirm('지울까요?')" -->
 						</form>
-					</td>
+						</td>
 					</tr>
 <?php
 				}
@@ -175,15 +196,14 @@ if(isset($_GET["name_id"])){
 			</table>
 			<button type="button" class="collapsible">회원권 추가▽</button>
 			<div class="content">
-			  <!-- FROM next??????? -->
 			  <form action="./CUD_reg.php" method="POST">
-				<input class="currentURL" type="text" name="currentURL" hidden>
+				<input class="regInput currentURL" type="text" name="currentURL" hidden>
 				아이디:
 				<input class="regInput" type="text" name="customer_id" value="<?php echo $id[0];?>"></br>
 				등록일:
 				<input class="regInput" type="date" name="reg_date" value="<?php echo date("Y-m-d");?>"></br>
 				개월수:
-				<input class="regInput" style="width: 82px;" type="text" name="how_long">
+				<input class="regInput" style="width: 6.5rem;;" type="text" name="how_long">
 				<input type="submit" name="insert_reg" value="추가">
 			  </form>
 			</div> 
@@ -191,25 +211,55 @@ if(isset($_GET["name_id"])){
 		<!-- 락커 -->
 		<div class="title">[락커]</div>
 		<div>
-			<table>
-				<tr><th>회원 ID</th><th>락커 ID</th><th>등록일</th><th>기간</th><th>마감일</th><th>-</th></tr>
+			<table class="table table-bordered table-hover table-condensed" style="margin-bottom: 0;">
+				<tr class="table-warning"><th>회원 ID</th><th>등록일</th><th>락커 ID</th><th>기간</th><th>마감일</th><th>-</th></tr>
 <?php
 		// LOCKER........
 		foreach($id as $x){
-			$sql = "SELECT customerID, lockerID, registered, how_long, (SELECT DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH)) AS expires  FROM Locker_Register WHERE customerID='$x'";
+			$sql = "SELECT customerID, lockerID, registered, how_long, (SELECT DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH)) AS expires  FROM Locker_Register WHERE customerID='$x' ORDER BY expires";
 			$result = mysqli_query($conn, $sql);
+			$size = mysqli_num_rows($result);
 
-			if ($result!=false && mysqli_num_rows($result) > 0) {
+			if ($result!=false && $size > 0) {
 				$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 				foreach($rows as $row) {
 ?>
 					<tr>
 						<td><?= $row["customerID"]; ?></td>
-						<td><?= $row["lockerID"]; ?></td>
 						<td><?= $row["registered"]; ?></td>
+						<td><?= $row["lockerID"]; ?></td>
+						<?php
+
+					if($row["expires"] < date("Y-m-d")){
+?>
 						<td><?= $row["how_long"]; ?></td>
+<?php 
+					}else{
+?>
+						<td><?= $row["how_long"]; ?> 
+							<form action='./CUD_locker.php' method='POST'>
+								<input class="currentURL" type="text" name="currentURL" hidden>
+								<input class="ID" type="text" name="ID" hidden>
+								<input class="registered" type="text" name="registered" hidden>
+								<input style="width: 2.6rem;" type="number" min=1 max=12 name='how_long' value=1>
+								<input class="lockerID" type="text" name="lockerID" hidden>
+								<input type="submit" name="extend" value="연장">
+							</form>
+						</td>
+<?php
+					}
+?>
 						<td><?= $row["expires"]; ?></td>
-						<td><button type="button" class="del">X</button></td>
+						
+						<td class="table-danger">
+						<form action="./CUD_locker.php" method="POST">
+							<input class="currentURL" type="text" name="currentURL" hidden>
+							<input class="registered" type="text" name="registered" hidden>
+							<input class="ID" type="text" name="ID" hidden>
+							<input class="lockerID" type="text" name="lockerID" hidden>
+							<input type="submit" name="delete" class="del" value="X"> <!-- onclick="return confirm('지울까요?')" -->
+						</form>
+						</td>
 					</tr>
 <?php
 				}
@@ -221,25 +271,47 @@ if(isset($_GET["name_id"])){
 			</table>
 			<button type="button" class="collapsible">락커 추가▽</button>
 			<div class="content">
-			  <form action="./insertLoc.php" method="POST">
+			  <form action="./CUD_locker.php" method="POST">
+				<input class="currentURL" type="text" name="currentURL" hidden>
 				아이디:
 				<input class="regInput" type="text" name="customer_id" value="<?php echo $id[0];?>"></br>
 				락커번호:
-				<input class="regInput" style="width: 114px;" type="text" name="locker"></br>
+				<select class="regInput" style="width: 9rem;" name="locker" id="locker">
+<?php
+				$sql = 'SELECT lockerID FROM (SELECT lockerID, DATE_ADD(MAX(registered), INTERVAL +how_long MONTH) as expire FROM locker_register GROUP BY lockerID) as T WHERE T.expire < CURDATE()';
+				
+				$result = mysqli_query($conn, $sql);
+				$arr = array();
+				if ($result!=false && mysqli_num_rows($result) > 0) {
+					$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+					foreach($rows as $row) {
+						array_push($arr, $row['lockerID']);
+					}
+				}else{$arr = ["빈 락커가 업습니다"];}
+				foreach($arr as $a){
+?>
+					<option value="<?php echo $a; ?>"><?php echo $a; ?></option>
+<?php
+				}
+?>
+				</select></br>
 				등록일:
 				<input class="regInput" type="date" name="reg_date" value="<?php echo date("Y-m-d");?>"></br>
 				개월수:
-				<input class="regInput" style="width: 82px;" type="text" name="how_long">
-				<input type="submit" name="name_search" value="추가">
+				<input class="regInput" style="width: 6.5rem;" type="text" name="how_long">
+				<input type="submit" name="insert_locker" value="추가">
 			  </form>
 			</div> 
 		</div>
 		<!-- 수업 -->
 		<div class="title">[수업]</div>
 		<div>
-			<table>
-				<tr><th>회원 ID</th><th>강사 ID</th><th>강사 이름</th><th>등록일</th><th>기간</th><th>마감일</th><th>-</th></tr>
+			<table class="table table-bordered table-hover table-condensed" style="margin-bottom: 0;">
+				<tr class="table-warning"><th>회원 ID</th><th>강사 ID</th><th>강사 이름</th><th>등록일</th><th>기간</th><th>마감일</th><th>-</th></tr>
 <?php
+		if($result!=false)
+			mysqli_free_result($result);
+		
 		// LESSON........
 		foreach($id as $x){
 			$sql = "SELECT customerID, teacherID, (SELECT name FROM Teacher_Info WHERE teacherID=Lesson_Register.teacherID) as teacherName, registered, how_long, (SELECT DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH)) AS expires FROM Lesson_Register WHERE customerID='$x'";
@@ -256,7 +328,15 @@ if(isset($_GET["name_id"])){
 						<td><?= $row["registered"]; ?></td>
 						<td><?= $row["how_long"]; ?></td>
 						<td><?= $row["expires"]; ?></td>
-						<td><button type="button" class="del">X</button></td>
+						<td class="table-danger">
+						<form action="./CUD_locker.php" method="POST">
+							<input class="currentURL" type="text" name="currentURL" hidden>
+							<input class="registered" type="text" name="registered" hidden>
+							<input class="ID" type="text" name="ID" hidden>
+							<input class="how_long" type="text" name="how_long" hidden>
+							<input type="submit" name="delete" class="del" value="X"> <!-- onclick="return confirm('지울까요?')" -->
+						</form>
+						</td>
 					</tr>
 <?php
 				}
@@ -277,7 +357,7 @@ if(isset($_GET["name_id"])){
 				등록일:
 				<input class="regInput" type="date" name="reg_date" value="<?php echo date("Y-m-d");?>"></br>
 				개월수:
-				<input class="regInput" style="width: 82px;" type="text" name="how_long">
+				<input class="regInput" style="width: 6.5rem;" type="text" name="how_long">
 				<input type="submit" name="name_search" value="추가">
 			  </form>
 			</div> 
@@ -309,6 +389,9 @@ if(isset($_GET["name_id"])){
 		$(this).val($(this).parent().parent().parent().children(':nth-child(2)').text());
     });
 	$('.how_long').each(function() {
+		$(this).val($(this).parent().parent().parent().children(':nth-child(3)').text());
+    });
+	$('.lockerID').each(function() {
 		$(this).val($(this).parent().parent().parent().children(':nth-child(3)').text());
     });
 	

@@ -7,7 +7,7 @@ if(session_status() == PHP_SESSION_NONE){
 }
 $des = urlencode("회원.php");
 
-print_r($_POST);
+//print_r($_POST);
 if(isset($_POST['update']) && !empty($_POST['update'])){ # UPDATE
 	$conn = Connection();
 	
@@ -46,7 +46,7 @@ if(isset($_POST['update']) && !empty($_POST['update'])){ # UPDATE
 	$name = $_POST['name'];
 	$phone = $_POST['phone'];
 	$dob = $_POST['dob'];
-	$address = $_POST['address'];
+	$address = (empty($_POST['address'])) ? "-":$_POST['address'];
 	$comment = (empty($_POST['comment'])) ? "-":$_POST['comment'];
 	
 	$sql = "INSERT INTO Customer_Info (name, mobile, dob, address, note) VALUES ('$name', '$phone', '$dob', '$address', '$comment')";

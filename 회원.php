@@ -98,7 +98,7 @@ form#modal_form > input {
 			foreach($rows as $row) {
 ?>
 				<tr>
-					<td><?= $row["ID"]; ?></td>
+					<td><a class="link"><?= $row["ID"]; ?></a></td>
 					<td><span class="clickable_s"><?= $row["name"]; ?></span></td>
 					<td><span class="clickable_s"><?= $row["mobile"]; ?></span></td>
 					<td><span class="clickable_s"><?= $row["dob"]; ?></span></td>
@@ -147,6 +147,10 @@ form#modal_form > input {
 </div>
 
 <script>
+$('.link').on("click",function(){
+  window.open("./검색.php?name_id="+$(this).text()+"&name_id_search=검색");
+});
+
 $('.instanceID').each(function() {
 	//First child of td
 	$id = $(this).parent().parent().parent().children(':first-child').text();

@@ -90,7 +90,7 @@ form {
 				  <label for="no3">NO</label>
 				</div><br>
 <?php
-				$sql = 'SELECT lockerID FROM Locker WHERE occupied IS null ORDER BY lockerID';
+				$sql = 'SELECT lockerID FROM (SELECT lockerID, DATE_ADD(MAX(registered), INTERVAL +how_long MONTH) as expire FROM locker_register GROUP BY lockerID) as T WHERE T.expire < CURDATE()';
 				
 				$result = mysqli_query($conn, $sql);
 				$arr = array();

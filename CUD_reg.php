@@ -3,10 +3,10 @@
 include("connect.php");
 
 /**
-"회원 연장을 DB 에 등록 후 리다이랙트 합니다"
+"회원 정보를 DB 에 등록 후 리다이랙트 합니다"
 */
 
-//print_r($_POST);
+print_r($_POST);
 $des = "검색.";
 if(isset($_POST['insert_reg']) && !empty($_POST['insert_reg'])){ # INSERT
 	$conn = Connection();
@@ -16,6 +16,7 @@ if(isset($_POST['insert_reg']) && !empty($_POST['insert_reg'])){ # INSERT
 	$how_long = $_POST['how_long'];
 	
 	$next = $_POST['currentURL'];
+	
 	$pattern = '/php.*/';
 	preg_match($pattern, $next, $next);
 	$next = $next[0];

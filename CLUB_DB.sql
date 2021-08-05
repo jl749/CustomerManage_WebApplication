@@ -12,14 +12,13 @@ CREATE TABLE Customer_Info(
 	name varchar(10) NOT NULL,
 	mobile varchar(13) NOT NULL,
 	dob DATE NOT NULL,
-	address varchar(100) NOT NULL,
+	address varchar(100) DEFAULT '-',,
 	note varchar(500) DEFAULT '-',
 	CONSTRAINT PK_Customer PRIMARY KEY (ID)
 );
 
 CREATE TABLE Locker(
 	lockerID INT NOT NULL,
-	occupied CHAR(0) DEFAULT NULL,
 	CONSTRAINT PK_Locker PRIMARY KEY (lockerID)
 );
 
