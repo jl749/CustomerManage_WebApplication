@@ -8,7 +8,7 @@ include("connect.php");
 
 print_r($_POST);
 $des = "검색.";
-if(isset($_POST['insert_lesson']) && !empty($_POST['insert_lesson'])){ # INSERT
+if(isset($_POST['insert_lesson']) && !empty($_POST['insert_lesson'])){ # CREATE
 	$conn = Connection();
 	
 	$id = $_POST['customer_id'];

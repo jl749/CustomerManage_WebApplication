@@ -12,7 +12,7 @@ CREATE TABLE Customer_Info(
 	name varchar(10) NOT NULL,
 	mobile varchar(13) NOT NULL,
 	dob DATE NOT NULL,
-	address varchar(100) DEFAULT '-',,
+	address varchar(100) DEFAULT '-',
 	note varchar(500) DEFAULT '-',
 	CONSTRAINT PK_Customer PRIMARY KEY (ID)
 );
@@ -58,4 +58,11 @@ CREATE TABLE Lesson_Register(
 	CONSTRAINT PK_LessonR PRIMARY KEY (customerID, registered),
 	CONSTRAINT FK_LessonR1 FOREIGN KEY (customerID) REFERENCES Customer_Info(ID) ON DELETE CASCADE,
 	CONSTRAINT FK_LessonR2 FOREIGN KEY (teacherID) REFERENCES Teacher_Info(teacherID)
+);
+
+CREATE TABLE Check_In(
+	customerID INT NOT NULL,
+	checkinDate DATE NOT NULL,
+	checkinTime TIME NOT NULL,
+	CONSTRAINT PK_CheckIn PRIMARY KEY (customerID, checkinDate)
 );
