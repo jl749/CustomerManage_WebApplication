@@ -6,8 +6,11 @@ if(session_status() == PHP_SESSION_NONE){
 }
 $conn = Connection();
 ?>
-<html>
+<html lang="ko">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>말소확인</title>
 <style>
 table, th, td {
   text-align: center;
@@ -18,6 +21,7 @@ table, th, td {
   font-weight: bold;
 }
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <div class="title">[등록 마감]</div>
@@ -36,7 +40,7 @@ if ($result!=false && mysqli_num_rows($result) > 0) {
 	foreach($rows as $row) {
 ?>
 		<tr>
-			<td><?= $row["customerID"]; ?></td>
+			<td><a class="link"><?= $row["customerID"]; ?></a></td>
 			<td><?= $row["name"]; ?></td>
 			<td><?= $row["registered"]; ?></td>
 			<td><?= $row["how_long"]; ?></td>
@@ -68,7 +72,7 @@ if ($result!=false && mysqli_num_rows($result) > 0) {
 	foreach($rows as $row) {
 ?>
 		<tr>
-			<td><?= $row["customerID"]; ?></td>
+			<td><a class="link"><?= $row["customerID"]; ?></td>
 			<td><?= $row["name"]; ?></td>
 			<td><?= $row["lockerID"]; ?></td>
 			<td><?= $row["registered"]; ?></td>
@@ -101,7 +105,7 @@ if ($result!=false && mysqli_num_rows($result) > 0) {
 	foreach($rows as $row) {
 ?>
 		<tr>
-			<td><?= $row["customerID"]; ?></td>
+			<td><a class="link"><?= $row["customerID"]; ?></td>
 			<td><?= $row["name"]; ?></td>
 			<td><?= $row["teacher_name"]; ?></td>
 			<td><?= $row["registered"]; ?></td>
@@ -117,3 +121,10 @@ if ($result!=false && mysqli_num_rows($result) > 0) {
 ?>
 	</table>
 </div>
+<script>
+$('.link').on("click",function(){
+  window.open("./검색.php?name_id="+$(this).text()+"&name_id_search=검색");
+});
+</script>
+</body>
+</html>

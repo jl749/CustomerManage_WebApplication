@@ -22,8 +22,12 @@ if(isset($_POST['update']) && !empty($_POST['update'])){ # UPDATE
 	if(mysqli_query($conn, $sql)){
 		echo "SUCCESS, redirect in 1 second";
 		//redirect
-		//header( "refresh:1;url=".$des ); 
-		header( "Location: ".$des ); 
+		if(isset($_POST['currentURL']) && !empty($_POST['currentURL'])){
+			header( "Location: ".$_POST['currentURL'] ); 
+		}else{
+			//header( "refresh:1;url=".$des ); 
+			header( "Location: ".$des ); 
+		}
 	}else{echo "UPDATE failed, Query='$sql'";}
 	
 	mysqli_close($conn);

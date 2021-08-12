@@ -16,6 +16,7 @@ $result = mysqli_query($conn, $sql);
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
+<title>강사정보</title>
 <style>
 table {
   text-align: center;
