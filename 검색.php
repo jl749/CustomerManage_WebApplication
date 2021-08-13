@@ -224,7 +224,7 @@ if(isset($_GET["name_id"])){
 					}else{
 ?>
 						<td><?= $row["how_long"]; ?> 
-							<form action='./CUD_locker.php' method='POST'>
+							<form action='./CUD_reg.php' method='POST'>
 								<input class="currentURL" type="text" name="currentURL" hidden>
 								<input class="ID" type="text" name="ID" hidden>
 								<input class="registered" type="text" name="registered" hidden>
