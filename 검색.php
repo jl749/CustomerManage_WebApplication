@@ -165,13 +165,13 @@ if(isset($_GET["name_id"])){
 		</br>
 		<!-- 회원정보 -->
 		<div class="title" style="display: inline-block;">[회원정보]</div> 
-		<form style="margin: 0 0; margin-left: 0.8rem; display: inline;" target="_blank" id="checkin_record" method="post" action="./checkinRecord.php">
-			<input class="checkinID" type="text" name="ID" hidden>
+		<form style="margin: 0 0; margin-left: 0.8rem; display: inline;" target="_blank" id="checkin_record" method="GET" action="./checkinRecord.php">
+			<input id="checkinID" type="text" name="ID" hidden>
 			<a href="javascript:{}" onclick="document.getElementById('checkin_record').submit();">체크인 기록</a>
         </form>
 		
 		<div>
-			<table class="table table-bordered table-hover table-condensed" id="infoTable">
+			<table class="table table-bordered table-hover table-condensed">
 				<tr class="table-warning"><th>회원 ID</th><th>이름</th><th>전화번호</th><th>생일</th><th>나이</th><th>주소</th><th>비고</th></tr>
 <?php
 		foreach($id as $x){
@@ -179,7 +179,7 @@ if(isset($_GET["name_id"])){
 			$row = mysqli_fetch_assoc($result);
 ?>
 			<tr>
-				<td><?= $row["ID"]; ?></td>
+				<td class="checkinID"><?= $row["ID"]; ?></td>
 				<td><span class="clickable_s"><?= $row["name"]; ?></span></td>
 				<td><span class="clickable_s"><?= $row["mobile"]; ?></span></td>
 				<td><span class="clickable_s"><?= $row["dob"]; ?></span></td>
@@ -530,12 +530,13 @@ if(isset($_GET["name_id"])){
 	$('.teacherID').each(function() {
 		$(this).val($(this).parent().parent().parent().children(':nth-child(5)').text());
     });
-	$('.checkinID').each(function() {
-		$ids = $("#infoTable > tr > td:first-child");
-		console.log($ids);
+	$('#checkinID').each(function() {
+		$ids = $(".checkinID");
+		$result = ' ';
 		$.each( $ids, function( key, value ) {
-		  console.log(value);
+		  $result += value.innerHTML + ' ';
 		});
+		$(this).val($result.trim());
     });
 	
 	var coll = document.getElementsByClassName("collapsible");

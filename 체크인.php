@@ -55,26 +55,13 @@ if(isset($_GET["checkin-serach"])){
 					<td><?= $row[0]; ?></td>
 					<td><?= $row[1]; ?></td>
 					<td><?= $row[2]; ?></td>
-<?php
-					$result2 = mysqli_query($conn, "SELECT ID, FROM Check_In WHERE checkinDate='$today'");
-					if($result2==false || mysqli_num_rows($result2) < 1){
-?>
-						<td>
-							<form action="./C_check.php" method="POST">
-								<input class="currentURL" type="text" name="currentURL" hidden>
-								<input class="ID" type="text" name="ID" hidden>
-								<input type="submit" name="checkin" value="&#10004;"> <!-- onclick="return confirm('지울까요?')" -->
-							</form>
-						</td>
-<?php
-					}else{
-?>
-						<td>already checked in</td>
-<?php
-					}
-					if($result2!=false)
-						mysqli_free_result($result2);
-?>
+					<td>
+						<form action="./CD_check.php" method="POST">
+							<input class="currentURL" type="text" name="currentURL" hidden>
+							<input class="ID" type="text" name="ID" hidden>
+							<input type="submit" name="checkin" value="&#10004;"> <!-- onclick="return confirm('지울까요?')" -->
+						</form>
+					</td>
 				</tr>
 <?php		
 			}
