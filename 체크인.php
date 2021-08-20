@@ -42,7 +42,7 @@ if(isset($_GET["checkin-serach"])){
 	
 	$today = date("Y-m-d");
 	$code = $_GET["code"];
-	$result1 = mysqli_query($conn, "SELECT b.ID, b.name, b.mobile, a.expires FROM (SELECT customerID, DATE_ADD(registered,INTERVAL +how_long MONTH) AS expires FROM Register) AS a INNER JOIN Customer_Info AS b ON a.customerID = b.ID WHERE mobile LIKE '%4422' AND (a.expires > CURDATE())");
+	$result1 = mysqli_query($conn, "SELECT b.ID, b.name, b.mobile, a.expires FROM (SELECT customerID, DATE_ADD(registered,INTERVAL +how_long MONTH) AS expires FROM Register) AS a INNER JOIN Customer_Info AS b ON a.customerID = b.ID WHERE mobile LIKE '%$code' AND (a.expires > CURDATE())");
 	if($result1!=false && mysqli_num_rows($result1) > 0){
 		$rows = mysqli_fetch_all($result1);
 ?>

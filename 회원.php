@@ -9,14 +9,14 @@ $rows_per_page = 20;
 
 $conn = Connection();
 $result = mysqli_query($conn, "SELECT COUNT(ID) as cnt FROM Customer_Info");
-$offset = 0;
-$count = mysqli_fetch_row($result)[0];
+$offset = 0; // future pagination
+$countAll = mysqli_fetch_row($result)[0] - 1; // minus 1 for @Admin account
 mysqli_free_result($result);
 
-$sql = "SELECT ID, name, mobile,sex, dob, (SELECT TIMESTAMPDIFF(YEAR, Customer_Info.dob, CURDATE())) AS age, address, note FROM Customer_Info ORDER BY name"; //LIMIT 30 OFFSET 0
+$sql = "SELECT COUNT(DISTINCT(Register.customerID)) AS count FROM Register INNER JOIN (SELECT customerID, DATE_ADD(registered,INTERVAL +how_long MONTH) AS expires FROM Register) AS b ON Register.customerID = b.customerID WHERE expires > CURDATE()";
 $result = mysqli_query($conn, $sql);
+$countReg = mysqli_fetch_row($result)[0];
 
-//print_r($rows)
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -88,11 +88,14 @@ form#modal_form > input {
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-<div class="title">회원 페이지 입니다</div>
+<div class="title" style="display: inline-block;">회원 페이지 입니다</div>
+<span style="margin-left: 1rem;"><?= "Total: ".$countAll."   /   Registered: ".$countReg; ?></span>
 <div>
 	<table class="table table-bordered table-hover">
 		<tr class="table-primary"><th>회원 ID</th><th>이름</th><th>전화번호</th><th>생일</th><th>나이</th><th>주소</th><th>비고</th><th>-</th></tr>
 <?php
+		$sql = "SELECT ID, name, mobile,sex, dob, (SELECT TIMESTAMPDIFF(YEAR, Customer_Info.dob, CURDATE())) AS age, address, note FROM Customer_Info ORDER BY name"; //LIMIT 30 OFFSET 0
+		$result = mysqli_query($conn, $sql);
 		if ($result!=false && mysqli_num_rows($result) > 0) {
 			$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 			foreach($rows as $row) {
