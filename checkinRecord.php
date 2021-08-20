@@ -2,7 +2,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title>체크인</title>
+<title>체크인 기록</title>
 <style>
 table, th, td {
   border: 1px solid black;

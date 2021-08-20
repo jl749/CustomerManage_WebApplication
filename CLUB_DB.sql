@@ -5,13 +5,15 @@ DROP TABLE IF EXISTS Register;
 DROP TABLE IF EXISTS Teacher_Info;
 DROP TABLE IF EXISTS Locker;
 DROP TABLE IF EXISTS Customer_Info;
+DROP TABLE IF EXISTS Check_In;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE Customer_Info(
 	ID INT AUTO_INCREMENT,
 	name varchar(10) NOT NULL,
 	mobile varchar(13) NOT NULL,
-	dob DATE NOT NULL,
+	sex char(1) NOT NULL,
+	dob DATE,
 	address varchar(100) DEFAULT '-',
 	note varchar(500) DEFAULT '-',
 	CONSTRAINT PK_Customer PRIMARY KEY (ID)

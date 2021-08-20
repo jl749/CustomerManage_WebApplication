@@ -13,7 +13,7 @@ $offset = 0;
 $count = mysqli_fetch_row($result)[0];
 mysqli_free_result($result);
 
-$sql = "SELECT ID, name, mobile, dob, (SELECT TIMESTAMPDIFF(YEAR, Customer_Info.dob, CURDATE())) AS age, address, note FROM Customer_Info ORDER BY name"; //LIMIT 30 OFFSET 0
+$sql = "SELECT ID, name, mobile,sex, dob, (SELECT TIMESTAMPDIFF(YEAR, Customer_Info.dob, CURDATE())) AS age, address, note FROM Customer_Info ORDER BY name"; //LIMIT 30 OFFSET 0
 $result = mysqli_query($conn, $sql);
 
 //print_r($rows)
@@ -99,7 +99,7 @@ form#modal_form > input {
 ?>
 				<tr>
 					<td><a class="link"><?= $row["ID"]; ?></a></td>
-					<td><span class="clickable_s"><?= $row["name"]; ?></span></td>
+					<td><span class="clickable_s"><?= $row["name"].' '.$row["sex"]; ?></span></td>
 					<td><span class="clickable_s"><?= $row["mobile"]; ?></span></td>
 					<td><span class="clickable_s"><?= $row["dob"]; ?></span></td>
 					<td><?= $row["age"]; ?></td>
@@ -129,12 +129,18 @@ form#modal_form > input {
 		
 		<form id="modal_form" style="margin: 0 1rem;" action="./CUD_customer.php" method="POST">
 			<input id="instanceID" type="text" name="ID" hidden>
-			<label for="name">이름: </label><br>
+			<label for="name" style="margin-right: 1rem;">이름: </label>
+			<div id="sex" style="display: inline;">
+			  <input type="radio" id="male" name="sex" value="M" checked>
+			  <label for="male">남자</label>
+			  <input type="radio" id="female" name="sex" value="F">
+			  <label for="female">여자</label>
+			</div><br>
 			<input type="text" id="name" name="name" required><br>
 			<label for="phone">전화번호: </label><br>
 			<input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required></br>
 			<label for="phone">생일: </label><br>
-			<input type="date" id="dob" name="dob" required></br>
+			<input type="date" id="dob" name="dob"></br>
 			<label for="age">나이: </label><br>
 			<input type="number" id="age" name="age" min="10" max="100" disabled></br>
 			<label for="address">주소: </label><br>
@@ -196,14 +202,29 @@ for(var i=0; i < btns.length ; i++){
 		$clickedTXT = $(this).text();
 		$('#instanceID').val($(this).parent().parent().children(':first-child').text());
 		console.log($('#instanceID').val());
+		
+		console.log($(this).parent().parent().children(':nth-child(2)').text().split(" ")[1]);
+		if($(this).parent().parent().children(':nth-child(2)').text().split(" ")[1] == 'M')
+			$('#male').prop('checked', true);
+		else
+			$('#female').prop('checked', true);
+			
 		//console.log($(this).parent().parent().children(':nth-child(2)').text());
 		
-		for(var i=0 ; i < 6 ; i++)
-			document.getElementById(fields[i]).value = null;
+		//for(var i=0 ; i < 6 ; i++)
+			//document.getElementById(fields[i]).value = null;
+		
 		for(var j=2 ; j < 8 ; j++)
 			if($clickedTXT != $(this).parent().parent().children(':nth-child(' + j + ')').text()) {
-				document.getElementById(fields[j-2]).value = $(this).parent().parent().children(':nth-child('+ j +')').text();
+				if(j==2)
+					document.getElementById(fields[0]).value = $(this).parent().parent().children(':nth-child('+ j +')').text().split(" ")[0];
+				else
+					document.getElementById(fields[j-2]).value = $(this).parent().parent().children(':nth-child('+ j +')').text();
 			}else{
+				if(j==2)
+					document.getElementById(fields[0]).value = $(this).parent().parent().children(':nth-child('+ j +')').text().split(" ")[0];
+				else
+					document.getElementById(fields[j-2]).value = $(this).parent().parent().children(':nth-child('+ j +')').text();
 				document.getElementById(fields[j-2]).focus(); //move cursor on input
 				document.getElementById(fields[j-2]).select();
 			}

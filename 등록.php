@@ -61,13 +61,20 @@ form {
 		<div class="title">회원등록</div>
 		<!-- $_SESSION['customerCreate'] -->
 		<form action="./CUD_customer.php" method="POST">
-			<label for="name">이름: </label><br>
+			<label for="name" style="margin-right: 2.7rem;">이름: </label>
+			<div id="sex" style="display: inline;">
+			  <input type="radio" id="male" name="sex" value="M" checked>
+			  <label for="male">남자</label>
+			  <input type="radio" id="female" name="sex" value="F">
+			  <label for="female">여자</label>
+			</div><br>
 			<input type="text" id="name" name="name" required><br>
+			
+			
 			<label for="phone">전화번호: </label><br>
 			<input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required></br>
 			<label for="phone">생일: </label><br>
-			<input type="date" id="dob" name="dob" required></br>
-			
+			<input type="date" id="dob" name="dob"></br>
 			
 			<div class="section">
 				<label>연습장: </label>
