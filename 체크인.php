@@ -17,7 +17,7 @@ table, th, td {
 }
 
 table {
-  max-width: 40%;
+  max-width: 50%;
 }
 
 td > form {
@@ -42,17 +42,17 @@ if(isset($_GET["checkin-serach"])){
 	
 	$today = date("Y-m-d");
 	$code = $_GET["code"];
-	$result1 = mysqli_query($conn, "SELECT ID, name, mobile FROM Customer_Info WHERE mobile LIKE '%$code'");
+	$result1 = mysqli_query($conn, "SELECT b.ID, b.name, b.mobile, a.expires FROM (SELECT customerID, DATE_ADD(registered,INTERVAL +how_long MONTH) AS expires FROM Register) AS a INNER JOIN Customer_Info AS b ON a.customerID = b.ID WHERE mobile LIKE '%4422' AND (a.expires > CURDATE())");
 	if($result1!=false && mysqli_num_rows($result1) > 0){
 		$rows = mysqli_fetch_all($result1);
 ?>
 		<table class="table table-bordered table-hover table-condensed">
-			<tr class="table-light"><th>회원 ID</th><th>이름</th><th>전화번호</th><th>-</th></tr>
+			<tr class="table-light"><th>회원 ID</th><th>이름</th><th>전화번호</th><th>-</th><th>마감일</th></tr>
 <?php
 			foreach($rows as $row) {
 ?>
 				<tr>
-					<td><?= $row[0]; ?></td>
+					<td><a class="link"><?= $row[0]; ?></a></td>
 					<td><?= $row[1]; ?></td>
 					<td><?= $row[2]; ?></td>
 					<td>
@@ -62,6 +62,7 @@ if(isset($_GET["checkin-serach"])){
 							<input type="submit" name="checkin" value="&#10004;"> <!-- onclick="return confirm('지울까요?')" -->
 						</form>
 					</td>
+					<td class="table-danger"><?= $row[3]; ?></td>
 				</tr>
 <?php		
 			}
@@ -76,6 +77,10 @@ if(isset($_GET["checkin-serach"])){
 }
 ?>
 <script>
+$('.link').on("click",function(){
+  window.open("./검색.php?name_id="+$(this).text()+"&name_id_search=검색");
+});
+
 $('.currentURL').each(function() {
 	$(this).val(window.location.href);
 });
