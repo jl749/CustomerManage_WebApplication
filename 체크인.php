@@ -31,7 +31,7 @@ td > form {
 <body>
 <div>
 	<form class="m-4" method="GET">
-		<input type="text" name="code" placeholder="핸드폰 뒷자리...">
+		<input type="text" name="code" placeholder="핸드폰 뒷자리..." autofocus>
 		<input type="submit" name="checkin-serach" value="체크인">
 	</form>
 </div>

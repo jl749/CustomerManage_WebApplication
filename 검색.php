@@ -122,7 +122,7 @@ form#modal_form > input {
 <body>
 <div>
 	<form class="m-4" method="GET">
-		<input type="text" name="name_id">
+		<input type="text" name="name_id" autofocus>
 		<input type="submit" name="name_id_search" value="검색">
 	</form>
 </div>
