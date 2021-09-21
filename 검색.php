@@ -145,7 +145,7 @@ if(isset($_GET["name_id"])){
 		if($result!=false)
 			mysqli_free_result($result);
 	}else{
-		$result = mysqli_query($conn, "SELECT ID FROM Customer_Info WHERE name='$name_id'");
+		$result = mysqli_query($conn, "SELECT ID FROM Customer_Info WHERE name LIKE '%{$name_id}%'");
 		
 		if($result!=false && mysqli_num_rows($result) > 0){
 			$rows = mysqli_fetch_all($result);
@@ -232,6 +232,10 @@ if(isset($_GET["name_id"])){
 								<input class="lockerID" type="text" name="lockerID" hidden>
 								<input type="submit" name="extend" value="연장">
 							</form>
+							<form action='./CUD_reg.php' method='POST'>
+							<form>
+							<form action='./CUD_reg.php' method='POST'>
+							<form>
 						</td>
 <?php
 					}
