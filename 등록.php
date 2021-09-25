@@ -68,7 +68,8 @@ form {
 			  <input type="radio" id="female" name="sex" value="F">
 			  <label for="female">여자</label>
 			</div><br>
-			<input type="text" id="name" name="name" required><br>
+			<input style="display: inline;" type="text" id="name" name="name" required>
+			<input style="display: inline; width: 4.5rem; margin-left: 5rem;" type="text" id="car" name="car" placeholder=" 차번호"><br>
 			
 			
 			<label for="phone">전화번호: </label><br>

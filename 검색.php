@@ -172,16 +172,17 @@ if(isset($_GET["name_id"])){
 		
 		<div>
 			<table class="table table-bordered table-hover table-condensed">
-				<tr class="table-warning"><th>회원 ID</th><th>이름</th><th>전화번호</th><th>생일</th><th>나이</th><th>주소</th><th>비고</th></tr>
+				<tr class="table-warning"><th>회원 ID</th><th>이름</th><th>전화번호</th><th>차번호</th><th>생일</th><th>나이</th><th>주소</th><th>비고</th></tr>
 <?php
 		foreach($id as $x){
-			$result = mysqli_query($conn, "SELECT ID, name, mobile, sex, dob, (SELECT TIMESTAMPDIFF(YEAR, Customer_Info.dob, CURDATE())) AS age, address, note FROM Customer_Info WHERE ID='$x'");
+			$result = mysqli_query($conn, "SELECT ID, name, mobile, sex, dob, (SELECT TIMESTAMPDIFF(YEAR, Customer_Info.dob, CURDATE())) AS age, address, note, car FROM Customer_Info WHERE ID='$x'");
 			$row = mysqli_fetch_assoc($result);
 ?>
 			<tr>
 				<td class="checkinID"><?= $row["ID"]; ?></td>
 				<td><span class="clickable_s"><?= $row["name"].' '.$row["sex"]; ?></span></td>
 				<td><span class="clickable_s"><?= $row["mobile"]; ?></span></td>
+				<td><span class="clickable_s"><?= $row["car"]; ?></span></td>
 				<td><span class="clickable_s"><?= $row["dob"]; ?></span></td>
 				<td><?= $row["age"]; ?></td>
 				<td><span class="clickable_s"><?= $row["address"]; ?></span></td>
@@ -232,10 +233,6 @@ if(isset($_GET["name_id"])){
 								<input class="lockerID" type="text" name="lockerID" hidden>
 								<input type="submit" name="extend" value="연장">
 							</form>
-							<form action='./CUD_reg.php' method='POST'>
-							<form>
-							<form action='./CUD_reg.php' method='POST'>
-							<form>
 						</td>
 <?php
 					}
@@ -491,9 +488,8 @@ if(isset($_GET["name_id"])){
 	</div>
 		
 		<form id="modal_form" style="margin: 0 1rem;" action="./CUD_customer.php" method="POST">
-			<input class="currentURL" type="text" name="currentURL" hidden>
 			<input id="instanceID" type="text" name="ID" hidden>
-			<label for="name">이름: </label>
+			<label for="name" style="margin-right: 1rem;">이름: </label>
 			<div id="sex" style="display: inline;">
 			  <input type="radio" id="male" name="sex" value="M" checked>
 			  <label for="male">남자</label>
@@ -503,7 +499,9 @@ if(isset($_GET["name_id"])){
 			<input type="text" id="name" name="name" required><br>
 			<label for="phone">전화번호: </label><br>
 			<input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required></br>
-			<label for="phone">생일: </label><br>
+			<label for="car">차번호: </label><br>
+			<input type="text" id="car" name="car" required><br>
+			<label for="dob">생일: </label><br>
 			<input type="date" id="dob" name="dob"></br>
 			<label for="age">나이: </label><br>
 			<input type="number" id="age" name="age" min="10" max="100" disabled></br>
@@ -590,7 +588,7 @@ if(isset($_GET["name_id"])){
 	// Get the <span> element that closes the modal
 	var span = document.getElementById("close");
 
-	const fields = ["name", "phone", "dob", "age", "address", "comment"]; 
+	const fields = ["name", "phone", "car", "dob", "age", "address", "comment"]; 
 
 	// When the user clicks on the button, open the modal
 	for(var i=0; i < btns.length ; i++){
@@ -606,19 +604,16 @@ if(isset($_GET["name_id"])){
 			else
 				$('#male').prop('checked', true);
 			
-			for(var j=2 ; j < 8 ; j++)
-			if($clickedTXT != $(this).parent().parent().children(':nth-child(' + j + ')').text()) {
+			for(var j=2 ; j < 9 ; j++){
 				if(j==2)
 					document.getElementById(fields[0]).value = $(this).parent().parent().children(':nth-child('+ j +')').text().split(" ")[0];
 				else
 					document.getElementById(fields[j-2]).value = $(this).parent().parent().children(':nth-child('+ j +')').text();
-			}else{
-				if(j==2)
-					document.getElementById(fields[0]).value = $(this).parent().parent().children(':nth-child('+ j +')').text().split(" ")[0];
-				else
-					document.getElementById(fields[j-2]).value = $(this).parent().parent().children(':nth-child('+ j +')').text();
-				document.getElementById(fields[j-2]).focus(); //move cursor on input
-				document.getElementById(fields[j-2]).select();
+				
+				if($clickedTXT == $(this).parent().parent().children(':nth-child(' + j + ')').text()) {
+					document.getElementById(fields[j-2]).focus(); //move cursor on input
+					document.getElementById(fields[j-2]).select();
+				}
 			}
 		}
 	}

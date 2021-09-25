@@ -14,12 +14,13 @@ if(isset($_POST['update']) && !empty($_POST['update'])){ # UPDATE
 	$id = $_POST['ID'];
 	$name = $_POST['name'];
 	$phone = $_POST['phone'];
+	$car = $_POST['car'];
 	$sex = $_POST['sex'];
 	$dob = $_POST['dob'];
 	$address = $_POST['address'];
 	$comment = (empty($_POST['comment'])) ? "-":$_POST['comment'];
 	
-	$sql = "UPDATE Customer_Info SET name='$name', mobile='$phone', sex='$sex', dob='$dob', address='$address', note='$comment' WHERE ID='$id'";
+	$sql = "UPDATE Customer_Info SET name='$name', mobile='$phone', car='$car', sex='$sex', dob='$dob', address='$address', note='$comment' WHERE ID='$id'";
 	if(mysqli_query($conn, $sql)){
 		echo "SUCCESS, redirect in 1 second";
 		//redirect
@@ -50,12 +51,13 @@ if(isset($_POST['update']) && !empty($_POST['update'])){ # UPDATE
 	
 	$name = $_POST['name'];
 	$phone = $_POST['phone'];
+	$car = $_POST['car'];
 	$sex = $_POST['sex'];
 	$dob = $_POST['dob'];
 	$address = (empty($_POST['address'])) ? "-":$_POST['address'];
 	$comment = (empty($_POST['comment'])) ? "-":$_POST['comment'];
 	
-	$sql = "INSERT INTO Customer_Info (name, mobile, sex, dob, address, note) VALUES ('$name', '$phone', '$sex', '$dob', '$address', '$comment')";
+	$sql = "INSERT INTO Customer_Info (name, mobile, sex, dob, address, note, car) VALUES ('$name', '$phone', '$sex', '$dob', '$address', '$comment', '$car')";
 	if(mysqli_query($conn, $sql)){
 		echo "SUCCESS(Customer_Info). ";
 		

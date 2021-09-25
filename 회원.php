@@ -92,9 +92,9 @@ form#modal_form > input {
 <span style="margin-left: 1rem;"><?= "Total: ".$countAll."   /   Registered: ".$countReg; ?></span>
 <div>
 	<table class="table table-bordered table-hover">
-		<tr class="table-primary"><th>회원 ID</th><th>이름</th><th>전화번호</th><th>생일</th><th>나이</th><th>주소</th><th>비고</th><th>-</th></tr>
+		<tr class="table-primary"><th>회원 ID</th><th>이름</th><th>전화번호</th><th>차번호</th><th>생일</th><th>나이</th><th>주소</th><th>비고</th><th>-</th></tr>
 <?php
-		$sql = "SELECT ID, name, mobile,sex, dob, (SELECT TIMESTAMPDIFF(YEAR, Customer_Info.dob, CURDATE())) AS age, address, note FROM Customer_Info ORDER BY name"; //LIMIT 30 OFFSET 0
+		$sql = "SELECT ID, name, mobile, car, sex, dob, (SELECT TIMESTAMPDIFF(YEAR, Customer_Info.dob, CURDATE())) AS age, address, note FROM Customer_Info ORDER BY name"; //LIMIT 30 OFFSET 0
 		$result = mysqli_query($conn, $sql);
 		if ($result!=false && mysqli_num_rows($result) > 0) {
 			$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -104,6 +104,7 @@ form#modal_form > input {
 					<td><a class="link"><?= $row["ID"]; ?></a></td>
 					<td><span class="clickable_s"><?= $row["name"].' '.$row["sex"]; ?></span></td>
 					<td><span class="clickable_s"><?= $row["mobile"]; ?></span></td>
+					<td><span class="clickable_s"><?= $row["car"]; ?></span></td>
 					<td><span class="clickable_s"><?= $row["dob"]; ?></span></td>
 					<td><?= $row["age"]; ?></td>
 					<td><span class="clickable_s"><?= $row["address"]; ?></span></td>
@@ -142,7 +143,9 @@ form#modal_form > input {
 			<input type="text" id="name" name="name" required><br>
 			<label for="phone">전화번호: </label><br>
 			<input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required></br>
-			<label for="phone">생일: </label><br>
+			<label for="car">차번호: </label><br>
+			<input type="text" id="car" name="car" required><br>
+			<label for="dob">생일: </label><br>
 			<input type="date" id="dob" name="dob"></br>
 			<label for="age">나이: </label><br>
 			<input type="number" id="age" name="age" min="10" max="100" disabled></br>
@@ -196,7 +199,7 @@ var btns = document.getElementsByClassName("clickable_s");
 // Get the <span> element that closes the modal
 var span = document.getElementById("close");
 
-const fields = ["name", "phone", "dob", "age", "address", "comment"]; 
+const fields = ["name", "phone", "car", "dob", "age", "address", "comment"]; 
 
 // When the user clicks on the button, open the modal
 for(var i=0; i < btns.length ; i++){
@@ -205,6 +208,7 @@ for(var i=0; i < btns.length ; i++){
 		$clickedTXT = $(this).text();
 		$('#instanceID').val($(this).parent().parent().children(':first-child').text());
 		console.log($('#instanceID').val());
+		//console.log($clickedTXT);
 		
 		console.log($(this).parent().parent().children(':nth-child(2)').text().split(" ")[1]);
 		if($(this).parent().parent().children(':nth-child(2)').text().split(" ")[1] == 'M')
@@ -216,21 +220,18 @@ for(var i=0; i < btns.length ; i++){
 		
 		//for(var i=0 ; i < 6 ; i++)
 			//document.getElementById(fields[i]).value = null;
-		
-		for(var j=2 ; j < 8 ; j++)
-			if($clickedTXT != $(this).parent().parent().children(':nth-child(' + j + ')').text()) {
-				if(j==2)
-					document.getElementById(fields[0]).value = $(this).parent().parent().children(':nth-child('+ j +')').text().split(" ")[0];
-				else
-					document.getElementById(fields[j-2]).value = $(this).parent().parent().children(':nth-child('+ j +')').text();
-			}else{
-				if(j==2)
-					document.getElementById(fields[0]).value = $(this).parent().parent().children(':nth-child('+ j +')').text().split(" ")[0];
-				else
-					document.getElementById(fields[j-2]).value = $(this).parent().parent().children(':nth-child('+ j +')').text();
+
+		for(var j=2 ; j < 9 ; j++){
+			if(j==2)
+				document.getElementById(fields[0]).value = $(this).parent().parent().children(':nth-child('+ j +')').text().split(" ")[0];
+			else
+				document.getElementById(fields[j-2]).value = $(this).parent().parent().children(':nth-child('+ j +')').text();
+			
+			if($clickedTXT == $(this).parent().parent().children(':nth-child(' + j + ')').text()) {
 				document.getElementById(fields[j-2]).focus(); //move cursor on input
 				document.getElementById(fields[j-2]).select();
 			}
+		}
 	}
 }
 
