@@ -1,4 +1,9 @@
 <?php
+/*
+This API handles customer info Create, Update, Delete
+"회원 정보를 DB 에 등록 후 리다이랙트 합니다"
+*/
+
 include("connect.php");
 // header('Content-Type: text/html; charset=utf-8');
 

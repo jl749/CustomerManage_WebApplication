@@ -1,10 +1,11 @@
 <?php
+/*
+This API handles locker info Create, Update, Delete
+"락커 정보를 DB 에 등록 후 리다이랙트 합니다"
+*/
 
 include("connect.php");
 
-/**
-"락커 정보를 DB 에 등록 후 리다이랙트 합니다"
-*/
 
 print_r($_POST);
 $des = "검색.";

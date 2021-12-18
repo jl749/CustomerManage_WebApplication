@@ -1,4 +1,9 @@
 <?php
+/*
+This API handles customer checkin Create, Delete
+"체크인 정보를 DB에 등록 후 리다이랙트합니다"
+*/
+
 include("connect.php");
 // header('Content-Type: text/html; charset=utf-8');
 

@@ -1,10 +1,10 @@
 <?php
+/*
+This API handles customer registration info Create, Update, Delete
+"회원등록 정보를 DB 에 등록 후 리다이랙트 합니다"
+*/
 
 include("connect.php");
-
-/**
-"회원 정보를 DB 에 등록 후 리다이랙트 합니다"
-*/
 
 print_r($_POST);
 $des = "검색.";
