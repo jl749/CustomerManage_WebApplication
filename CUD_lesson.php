@@ -1,10 +1,10 @@
 <?php
-
-include("connect.php");
-
-/**
+/*
+This API handles lesson info Create, Update, Delete
 "레슨 정보를 DB 에 등록 후 리다이랙트 합니다"
 */
+
+include("connect.php");
 
 print_r($_POST);
 $des = "검색.";

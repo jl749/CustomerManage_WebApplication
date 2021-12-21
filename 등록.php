@@ -171,6 +171,28 @@ form {
 	
 <script>
 $( document ).ready(function() {
+	// tel num auto format
+	var phoneField = document.getElementById('phone');
+	phoneField.addEventListener('keyup', function() {
+	var phoneValue = phoneField.value;
+	var output;
+	phoneValue = phoneValue.replace(/[^0-9]/g, '');  // remove non numeric input
+		var area = phoneValue.substr(0, 3);  // 010
+		var pre = phoneValue.substr(3, 4);  // 3456
+		var tel = phoneValue.substr(7, 4);  // 7890
+
+		if (area.length < 3) {
+			output = area;
+		} else if (area.length == 3 && pre.length < 4) {
+			output = area + "-" + pre;
+		} else if (area.length == 3 && pre.length == 4) {
+			output = area + "-" + pre + "-"+ tel;
+		}
+		
+		phoneField.value = output;
+	});
+
+
 	$(".reg1").prop( "disabled", true );
 	$(".reg2").prop( "disabled", true );
 	$(".reg3").prop( "disabled", true );
