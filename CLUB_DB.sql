@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS customer_info;
 DROP TABLE IF EXISTS check_in;
 SET FOREIGN_KEY_CHECKS = 1;
 
+
 CREATE TABLE customer_info(
 	ID INT AUTO_INCREMENT,
 	name varchar(10) NOT NULL,
