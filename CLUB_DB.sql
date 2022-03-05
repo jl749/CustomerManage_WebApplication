@@ -90,3 +90,12 @@ UPDATEs
 */
 ALTER TABLE customer_info
 ADD COLUMN car VARCHAR(15) DEFAULT '-' AFTER mobile;
+
+ALTER TABLE register
+ADD COLUMN offset INT DEFAULT 0 AFTER how_long;
+
+ALTER TABLE locker_register
+ADD COLUMN offset INT DEFAULT 0 AFTER how_long;
+
+ALTER TABLE lesson_register
+ADD COLUMN offset INT DEFAULT 0 AFTER how_long;
