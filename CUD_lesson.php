@@ -22,7 +22,7 @@ if(isset($_POST['insert_lesson']) && !empty($_POST['insert_lesson'])){ # CREATE
 	$next = $next[0];
 	$next = $des.$next;
 	
-	$sql = "INSERT INTO Lesson_Register VALUES ('$id', '$teacher', '$reg_date', '$how_long')";
+	$sql = "INSERT INTO Lesson_Register VALUES ('$id', '$teacher', '$reg_date', '$how_long', 0)";
 	if(mysqli_query($conn, $sql)){
 		echo "SUCCESS, redirect in 1 second";
 		//redirect

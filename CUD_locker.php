@@ -23,7 +23,7 @@ if(isset($_POST['insert_locker']) && !empty($_POST['insert_locker'])){ # INSERT
 	$next = $next[0];
 	$next = $des.$next;
 	
-	$sql = "INSERT INTO Locker_Register VALUES ('$id', '$locker', '$reg_date', '$how_long')";
+	$sql = "INSERT INTO Locker_Register VALUES ('$id', '$locker', '$reg_date', '$how_long', 0)";
 	if(mysqli_query($conn, $sql)){
 		echo "SUCCESS, redirect in 1 second";
 		//redirect

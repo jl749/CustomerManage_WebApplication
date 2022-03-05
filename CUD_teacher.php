@@ -44,7 +44,7 @@ if(isset($_POST['insert']) && !empty($_POST['insert'])){ # CREATE
 		header( "Location: $des" );
 		mysqli_close($conn);
 	}else{echo "DELETE failed, Query='$sql'";}
-}elseif(isset($_POST['update']) && !empty($_POST['update'])){ #UPDATE
+}elseif(isset($_POST['update']) && !empty($_POST['update'])){ # UPDATE
 	$conn = Connection();
 	
 	$id = $_POST['ID'];

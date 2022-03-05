@@ -203,7 +203,7 @@ if(isset($_GET["name_id"])){
 <?php
 		// REGISTRATION........
 		foreach($id as $x){
-			$sql = "SELECT customerID, registered, how_long, (SELECT DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH)) AS expires FROM Register WHERE customerID='$x' ORDER BY expires";
+			$sql = "SELECT customerID, registered, how_long, (SELECT DATE_ADD(DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH), INTERVAL +Register.offset DAY)) AS expires FROM Register WHERE customerID='$x' ORDER BY expires";
 			$result = mysqli_query($conn, $sql);
 
 			$size = mysqli_num_rows($result);
@@ -212,33 +212,51 @@ if(isset($_GET["name_id"])){
 				//print_r($rows);
 				
 				foreach($rows as $row) {
+					$is_expired = $row["expires"] < date("Y-m-d");
 ?>
 					<tr>
 						<td><?= $row["customerID"]; ?></td>
 						<td><?= $row["registered"]; ?></td>
+						<td>
+							<?= $row["how_long"]; ?>
 <?php
-
-					if($row["expires"] < date("Y-m-d")){
+							if(!$is_expired){  // 기간
 ?>
-						<td><?= $row["how_long"]; ?></td>
-<?php 
-					}else{
+									<form action='./CUD_reg.php' method='POST'>
+										<input class="currentURL" type="text" name="currentURL" hidden>
+										<input class="ID" type="text" name="ID" hidden>
+										<input class="registered" type="text" name="registered" hidden>
+										<input style="width: 2.6rem;" type="number" min=1 max=12 name='how_long' value=1>
+										<input class="lockerID" type="text" name="lockerID" hidden>
+										<input type="submit" name="extend" value="연장">
+									</form>
+<?php
+							}
 ?>
-						<td><?= $row["how_long"]; ?> 
-							<form action='./CUD_reg.php' method='POST'>
-								<input class="currentURL" type="text" name="currentURL" hidden>
-								<input class="ID" type="text" name="ID" hidden>
-								<input class="registered" type="text" name="registered" hidden>
-								<input style="width: 2.6rem;" type="number" min=1 max=12 name='how_long' value=1>
-								<input class="lockerID" type="text" name="lockerID" hidden>
-								<input type="submit" name="extend" value="연장">
-							</form>
 						</td>
-<?php
-					}
-?>
 
-						<td><?= $row["expires"]; ?></td>
+						<td>
+<?php							
+							if($is_expired){  // 마감일
+?>
+								<?= $row["expires"]; ?>
+<?php
+							}else{
+?>
+								<form action='./CUD_reg.php' method='POST'>
+									<input class="ID" type="text" name="ID" hidden>
+									<input class="registered" type="text" name="registered" hidden>
+									<input class="currentURL" type="text" name="currentURL" hidden>
+
+									<button style="width: 27px;" type="submit" name="day_minus" value="register">-</button>
+								<?= $row["expires"]; ?>
+									<input class="currentURL" type="text" name="currentURL" hidden>
+									<button style="width: 27px;" type="submit" name="day_plus" value="register">+</button>
+								</form>
+<?php
+							}							
+?>
+						</td>
 						
 						<td class="table-danger">
 						<form action="./CUD_reg.php" method="POST">
@@ -280,40 +298,59 @@ if(isset($_GET["name_id"])){
 <?php
 		// LOCKER........
 		foreach($id as $x){
-			$sql = "SELECT customerID, lockerID, registered, how_long, (SELECT DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH)) AS expires  FROM Locker_Register WHERE customerID='$x' ORDER BY expires";
+			$sql = "SELECT customerID, lockerID, registered, how_long, (SELECT DATE_ADD(DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH), INTERVAL +Locker_Register.offset DAY)) AS expires FROM Locker_Register WHERE customerID='$x' ORDER BY expires";
 			$result = mysqli_query($conn, $sql);
 			$size = mysqli_num_rows($result);
 
 			if ($result!=false && $size > 0) {
 				$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 				foreach($rows as $row) {
+					$is_expired = $row["expires"] < date("Y-m-d");
 ?>
 					<tr>
 						<td><?= $row["customerID"]; ?></td>
 						<td><?= $row["registered"]; ?></td>
 						<td><?= $row["lockerID"]; ?></td>
-<?php
 
-					if($row["expires"] < date("Y-m-d")){
-?>
-						<td><?= $row["how_long"]; ?></td>
-<?php 
-					}else{
-?>
-						<td><?= $row["how_long"]; ?> 
-							<form action='./CUD_locker.php' method='POST'>
-								<input class="currentURL" type="text" name="currentURL" hidden>
-								<input class="ID" type="text" name="ID" hidden>
-								<input class="registered" type="text" name="registered" hidden>
-								<input style="width: 2.6rem;" type="number" min=1 max=12 name='how_long' value=1>
-								<input class="lockerID" type="text" name="lockerID" hidden>
-								<input type="submit" name="extend" value="연장">
-							</form>
-						</td>
+						<td>
+							<?= $row["how_long"]; ?>
 <?php
-					}
+							if(!$is_expired){  // 기간
 ?>
-						<td><?= $row["expires"]; ?></td>
+									<form action='./CUD_locker.php' method='POST'>
+										<input class="currentURL" type="text" name="currentURL" hidden>
+										<input class="ID" type="text" name="ID" hidden>
+										<input class="registered" type="text" name="registered" hidden>
+										<input style="width: 2.6rem;" type="number" min=1 max=12 name='how_long' value=1>
+										<input class="lockerID" type="text" name="lockerID" hidden>
+										<input type="submit" name="extend" value="연장">
+									</form>
+<?php
+							}
+?>
+						</td>
+						<td>
+<?php							
+							if($is_expired){  // 마감일
+?>
+								<?= $row["expires"]; ?>
+<?php
+							}else{
+?>
+								<form action='./CUD_reg.php' method='POST'>
+									<input class="ID" type="text" name="ID" hidden>
+									<input class="registered" type="text" name="registered" hidden>
+									<input class="currentURL" type="text" name="currentURL" hidden>
+
+									<button style="width: 27px;" type="submit" name="day_minus" value="locker_register">-</button>
+								<?= $row["expires"]; ?>
+									<input class="currentURL" type="text" name="currentURL" hidden>
+									<button style="width: 27px;" type="submit" name="day_plus" value="locker_register">+</button>
+								</form>
+<?php
+							}							
+?>
+						</td>
 						
 						<td class="table-danger">
 						<form action="./CUD_locker.php" method="POST">
@@ -342,7 +379,7 @@ if(isset($_GET["name_id"])){
 				락커번호:
 				<select class="regInput" style="width: 9rem;" name="locker" id="locker">
 <?php
-				$sql = 'SELECT lockerID FROM (SELECT lockerID, DATE_ADD(MAX(registered), INTERVAL +how_long MONTH) as expire FROM locker_register GROUP BY lockerID) as T WHERE T.expire < CURDATE()';
+				$sql = 'SELECT lockerID FROM (SELECT lockerID, DATE_ADD(DATE_ADD(MAX(registered), INTERVAL +how_long MONTH), INTERVAL +offset DAY) as expire FROM locker_register GROUP BY lockerID) as T WHERE T.expire < CURDATE()';
 				
 				$result = mysqli_query($conn, $sql);
 				$arr = array();
@@ -378,38 +415,58 @@ if(isset($_GET["name_id"])){
 		
 		// LESSON........
 		foreach($id as $x){
-			$sql = "SELECT customerID, teacherID, (SELECT name FROM Teacher_Info WHERE teacherID=Lesson_Register.teacherID) as teacherName, registered, how_long, (SELECT DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH)) AS expires FROM Lesson_Register WHERE customerID='$x'";
+			$sql = "SELECT customerID, teacherID, (SELECT name FROM Teacher_Info WHERE teacherID=Lesson_Register.teacherID) as teacherName, registered, how_long, (SELECT DATE_ADD(DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH), INTERVAL +Lesson_Register.offset DAY)) AS expires FROM Lesson_Register WHERE customerID='$x'";
 			$result = mysqli_query($conn, $sql);
 
 			if ($result!=false && mysqli_num_rows($result) > 0) {
 				$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 				foreach($rows as $row) {
+					$is_expired = $row["expires"] < date("Y-m-d");
 ?>
 					<tr>
 						<td><?= $row["customerID"]; ?></td>
 						<td><?= $row["registered"]; ?></td>
+						<td>
+							<?= $row["how_long"]; ?>
 <?php
-
-					if($row["expires"] < date("Y-m-d")){
+							if(!$is_expired){  // 기간
 ?>
-						<td><?= $row["how_long"]; ?></td>
-<?php 
-					}else{
+									<form action='./CUD_reg.php' method='POST'>
+										<input class="currentURL" type="text" name="currentURL" hidden>
+										<input class="ID" type="text" name="ID" hidden>
+										<input class="registered" type="text" name="registered" hidden>
+										<input style="width: 2.6rem;" type="number" min=1 max=12 name='how_long' value=1>
+										<input class="lockerID" type="text" name="lockerID" hidden>
+										<input type="submit" name="extend" value="연장">
+									</form>
+<?php
+							}
 ?>
-						<td><?= $row["how_long"]; ?> 
-							<form action='./CUD_lesson.php' method='POST'>
-								<input class="currentURL" type="text" name="currentURL" hidden>
-								<input class="ID" type="text" name="ID" hidden>
-								<input class="registered" type="text" name="registered" hidden>
-								<input style="width: 2.6rem;" type="number" min=1 max=12 name='how_long' value=1>
-								<input class="teacherID" type="text" name="teacherID" hidden>
-								<input type="submit" name="extend" value="연장">
-							</form>
 						</td>
-<?php
-					}
+
+						<td>
+<?php							
+							if($is_expired){  // 마감일
 ?>
-						<td><?= $row["expires"]; ?></td>
+								<?= $row["expires"]; ?>
+<?php
+							}else{
+?>
+								<form action='./CUD_reg.php' method='POST'>
+									<input class="ID" type="text" name="ID" hidden>
+									<input class="registered" type="text" name="registered" hidden>
+									<input class="currentURL" type="text" name="currentURL" hidden>
+									
+									<button style="width: 27px;" type="submit" name="day_minus" value="lesson_register">-</button>
+								<?= $row["expires"]; ?>
+									<input class="currentURL" type="text" name="currentURL" hidden>
+									<button style="width: 27px;" type="submit" name="day_plus" value="lesson_register">+</button>
+								</form>
+<?php
+							}							
+?>
+						</td>
+
 						<td><?= $row["teacherID"]; ?></td>
 						<td><?= $row["teacherName"]; ?></td>
 						<td class="table-danger">
