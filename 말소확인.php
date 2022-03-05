@@ -32,7 +32,7 @@ table, th, td {
 // REGISTRATION........
 $today = date("Y-m-d");
 //DATE_ADD(CURDATE(),INTERVAL -5 DAY)
-$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Register.customerID) AS name, (SELECT mobile FROM Customer_Info WHERE ID=Register.customerID) AS mobile, registered, how_long, (DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH)) AS expires, DATEDIFF((DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH)), CURDATE()) AS days_left FROM Register WHERE  DATEDIFF((DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH)), CURDATE()) between 0 AND 2";
+$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Register.customerID) AS name, (SELECT mobile FROM Customer_Info WHERE ID=Register.customerID) AS mobile, registered, how_long, (DATE_ADD(DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH), INTERVAL +Register.offset DAY)) AS expires, DATEDIFF(DATE_ADD(DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH), INTERVAL +Register.offset DAY), CURDATE()) AS days_left FROM Register WHERE DATEDIFF(DATE_ADD(DATE_ADD(Register.registered,INTERVAL +Register.how_long MONTH), INTERVAL +Register.offset DAY), CURDATE()) between 0 AND 2";
 $result = mysqli_query($conn, $sql);
 
 if ($result!=false && mysqli_num_rows($result) > 0) {
@@ -65,7 +65,7 @@ if ($result!=false && mysqli_num_rows($result) > 0) {
 // LOCKER........
 $today = date("Y-m-d");
 //DATE_ADD(CURDATE(),INTERVAL -5 DAY)
-$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Locker_Register.customerID) AS name, (SELECT mobile FROM Customer_Info WHERE ID=customerID) AS mobile, lockerID, registered, how_long, (DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH)) AS expires, DATEDIFF((DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH)), CURDATE()) AS days_left FROM Locker_Register WHERE  DATEDIFF((DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH)), CURDATE()) between 0 AND 2";
+$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Locker_Register.customerID) AS name, (SELECT mobile FROM Customer_Info WHERE ID=customerID) AS mobile, lockerID, registered, how_long, (DATE_ADD(DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH),INTERVAL +Locker_Register.offset DAY)) AS expires, DATEDIFF((DATE_ADD(DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH),INTERVAL +Locker_Register.offset DAY)), CURDATE()) AS days_left FROM Locker_Register WHERE  DATEDIFF((DATE_ADD(DATE_ADD(Locker_Register.registered,INTERVAL +Locker_Register.how_long MONTH),INTERVAL +Locker_Register.offset DAY)), CURDATE()) between 0 AND 2";
 $result = mysqli_query($conn, $sql);
 
 if ($result!=false && mysqli_num_rows($result) > 0) {
@@ -99,7 +99,7 @@ if ($result!=false && mysqli_num_rows($result) > 0) {
 // LESSON........
 $today = date("Y-m-d");
 //DATE_ADD(CURDATE(),INTERVAL -5 DAY)
-$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Lesson_Register.customerID) AS name, (SELECT mobile FROM Customer_Info WHERE ID=customerID) AS mobile, (SELECT name FROM Teacher_Info WHERE teacherID=Lesson_Register.teacherID) AS teacher_name, registered, how_long, (DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH)) AS expires, DATEDIFF((DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH)), CURDATE()) AS days_left FROM Lesson_Register WHERE  DATEDIFF((DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH)), CURDATE()) between 0 AND 2";
+$sql = "SELECT customerID, (SELECT name FROM Customer_Info WHERE ID=Lesson_Register.customerID) AS name, (SELECT mobile FROM Customer_Info WHERE ID=customerID) AS mobile, (SELECT name FROM Teacher_Info WHERE teacherID=Lesson_Register.teacherID) AS teacher_name, registered, how_long, (DATE_ADD(DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH),INTERVAL +Lesson_Register.offset DAY)) AS expires, DATEDIFF((DATE_ADD(DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH),INTERVAL +Lesson_Register.offset DAY)), CURDATE()) AS days_left FROM Lesson_Register WHERE  DATEDIFF((DATE_ADD(DATE_ADD(Lesson_Register.registered,INTERVAL +Lesson_Register.how_long MONTH),INTERVAL +Lesson_Register.offset DAY)), CURDATE()) between 0 AND 2";
 $result = mysqli_query($conn, $sql);
 
 if ($result!=false && mysqli_num_rows($result) > 0) {
